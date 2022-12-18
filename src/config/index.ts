@@ -1,5 +1,10 @@
 export default () => ({
-  port: parseInt(process.env.PORT, 10) || 4200,
+  env: process.env.NODE_ENV || 'dev',
+
+  app: {
+    name: process.env.APP_NAME || '',
+    port: parseInt(process.env.PORT, 10) || 4200,
+  },
 
   frontend: process.env.FRONTEND_URL || '',
 
@@ -10,6 +15,11 @@ export default () => ({
       expiresIn: process.env.JWT_EXPIRES_IN || '2d',
       refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
     },
+  },
+
+  throttler: {
+    ttl: parseInt(process.env.THROTTLER_TTL, 10) || 10,
+    limit: parseInt(process.env.THROTTLER_LIMIT, 10) || 10,
   },
 
   database: {

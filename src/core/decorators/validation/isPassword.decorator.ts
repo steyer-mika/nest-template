@@ -15,18 +15,17 @@ export class IsPasswordConstraint implements ValidatorConstraintInterface {
   }
 }
 
-export function IsPassword(validationOptions?: ValidationOptions) {
+export const IsPassword = (validationOptions?: ValidationOptions) => {
   return (object: unknown, propertyName: string) => {
     registerDecorator({
       target: object.constructor,
       propertyName,
       options: {
-        message:
-          'password must contain at least one uppercase letter, one lowercase letter, one special character, and one digit',
+        message: `${propertyName} must contain at least one uppercase letter, one lowercase letter, one special character, and one digit`,
         ...validationOptions,
       },
       constraints: [],
       validator: IsPasswordConstraint,
     });
   };
-}
+};

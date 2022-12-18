@@ -1,5 +1,5 @@
 import { APP_GUARD } from '@nestjs/core';
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -7,6 +7,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 
 import config from '@config';
+import { LoggerMiddleware } from '@core/middleware/logger.middleware';
 import { HealthModule } from '@/health/health.module';
 import { UsersModule } from '@api/users/users.module';
 import { AuthModule } from '@auth/auth.module';
@@ -22,7 +23,7 @@ import { PoliciesGuard } from '@auth/guards/policies.guard';
 
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('database.uri'),
       }),
       inject: [ConfigService],
@@ -30,11 +31,18 @@ import { PoliciesGuard } from '@auth/guards/policies.guard';
 
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
+      serveStaticOptions: {
+        fallthrough: false,
+      },
     }),
 
-    ThrottlerModule.forRoot({
-      ttl: 60,
-      limit: 20,
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        ttl: configService.get<number>('throttler.ttl'),
+        limit: configService.get<number>('throttler.limit'),
+      }),
     }),
 
     HealthModule,
@@ -56,4 +64,8 @@ import { PoliciesGuard } from '@auth/guards/policies.guard';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
