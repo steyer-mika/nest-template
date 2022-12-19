@@ -20,7 +20,7 @@ export class User {
   @Prop({ required: true, enum: Roles })
   role: Roles;
 
-  @Factory(async () => bcrypt.hash('TestTest1!', await bcrypt.genSalt(10)))
+  @Factory(() => bcrypt.hashSync('TestTest1!', bcrypt.genSaltSync(10)))
   @Prop({ required: true })
   password: string;
 }

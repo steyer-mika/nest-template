@@ -1,15 +1,18 @@
 import { Controller, Post, UseGuards, Get, Body } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { UserDto } from '@api/users/dto/user.dto';
 import { Public } from '@auth/decorators/public.decorator';
-import { User } from 'src/core/decorators/param/user.decorator';
+import { User } from '@core/decorators/param/user.decorator';
 
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { JwtAuthResponse } from './jwt/types';
 
+@ApiTags('auth')
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

@@ -1,8 +1,8 @@
 import { IsEmail, IsNotEmpty, IsEnum, IsString } from 'class-validator';
 
 import { Roles } from '@auth/roles';
-import { IsPassword } from 'src/core/decorators/validation/isPassword.decorator';
-import { Match } from 'src/core/decorators/validation/match.decorator';
+import { IsPassword } from '@core/decorators/validation/isPassword.decorator';
+import { Match } from '@core/decorators/validation/match.decorator';
 
 export class CreateUserDto {
   @IsEmail()

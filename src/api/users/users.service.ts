@@ -8,13 +8,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { MongoError } from 'mongodb';
+
+import { DuplicateEmailException } from '@core/exceptions/duplicate-email.exception';
 
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { DuplicateEmailException } from 'src/core/exceptions/duplicate-email.exception';
-import { MongoError } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -37,10 +38,8 @@ export class UsersService {
 
       return plainToInstance(UserDto, createdUser);
     } catch (error) {
-      if (error instanceof MongoError) {
-        if (error.code === 11000) {
-          throw new DuplicateEmailException();
-        }
+      if (error instanceof MongoError && error.code === 11000) {
+        throw new DuplicateEmailException();
       }
       throw new InternalServerErrorException();
     }

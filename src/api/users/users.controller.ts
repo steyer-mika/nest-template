@@ -1,13 +1,16 @@
 import { Controller, Body, Get, Patch, Delete } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger/dist';
 
-import { Id } from 'src/core/decorators/param/id.decorator';
+import { Id } from '@core/decorators/param/id.decorator';
+import { Authorization } from '@/core/compositions/authorization.decorator';
 
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
-import { Authorization } from '@/core/compositions/authorization.decorator';
 
+@ApiTags('users')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
