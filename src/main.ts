@@ -23,7 +23,11 @@ const bootstrap = async () => {
   app.use(compression());
 
   // https://docs.nestjs.com/security/helmet //
-  app.use(helmet());
+    app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    }),
+  );
 
   // https://docs.nestjs.com/faq/global-prefix //
   app.setGlobalPrefix('api');
