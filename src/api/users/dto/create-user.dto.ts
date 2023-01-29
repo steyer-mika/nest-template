@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsEnum, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsEnum,
+  IsString,
+  IsBoolean,
+} from 'class-validator';
 
 import { Roles } from '@auth/roles';
 import { IsPassword } from '@core/decorators/validation/isPassword.decorator';
@@ -20,4 +26,7 @@ export class CreateUserDto {
 
   @IsEnum(Roles)
   readonly role: Roles;
+
+  @IsBoolean()
+  readonly active: boolean;
 }

@@ -9,14 +9,17 @@ export class UserDto {
   readonly id: string;
 
   @Expose()
-  username: string;
+  readonly username: string;
 
   @Expose()
-  email: string;
+  readonly email: string;
 
   @Expose()
-  role: Roles;
+  readonly role: Roles;
 
   @ApiHideProperty()
-  password: string;
+  readonly password: string;
+
+  @Expose()
+  readonly active: boolean;
 }

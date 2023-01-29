@@ -56,10 +56,6 @@ export class UsersService {
     return users.map((x) => plainToInstance(UserDto, x));
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    return this.userModel.findOne({ email });
-  }
-
   async update(id: string, updateUserDto: UpdateUserDto): Promise<UserDto> {
     const updatedUser = await this.userModel.findByIdAndUpdate(
       id,
@@ -75,5 +71,14 @@ export class UsersService {
     const deletedUser = await this.userModel.findByIdAndDelete(id);
     if (!deletedUser) throw new NotFoundException();
     return `User with id ${deletedUser.id} has been deleted successfully.`;
+  }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    return this.userModel.findOne({ email });
+  }
+
+  async getUserById(id: string): Promise<UserDto | undefined> {
+    const user = await this.userModel.findById(id).exec();
+    return plainToInstance(UserDto, user);
   }
 }

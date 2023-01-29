@@ -23,7 +23,7 @@ const bootstrap = async () => {
   app.use(compression());
 
   // https://docs.nestjs.com/security/helmet //
-    app.use(
+  app.use(
     helmet({
       crossOriginResourcePolicy: false,
     }),

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEnum, IsString } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsString, IsBoolean } from 'class-validator';
 
 import { Roles } from '@auth/roles';
 
@@ -9,4 +9,7 @@ export class UpdateUserDto {
 
   @IsEnum(Roles)
   readonly role: Roles;
+
+  @IsBoolean()
+  readonly active: boolean;
 }

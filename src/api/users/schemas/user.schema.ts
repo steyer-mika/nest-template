@@ -23,6 +23,10 @@ export class User {
   @Factory(() => bcrypt.hashSync('TestTest1!', bcrypt.genSaltSync(10)))
   @Prop({ required: true })
   password: string;
+
+  @Factory((faker) => faker.datatype.boolean())
+  @Prop({ required: true })
+  active: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
