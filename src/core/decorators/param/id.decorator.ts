@@ -11,7 +11,7 @@ export const Id = createParamDecorator(
   (data: undefined, ctx: ExecutionContext) => {
     const request: Request = ctx.switchToHttp().getRequest();
 
-    const id = request.params.id;
+    const { id } = request.params;
 
     if (id && mongooseId.test(id)) return id;
 

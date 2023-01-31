@@ -6,6 +6,8 @@ import {
   MongooseHealthIndicator,
 } from '@nestjs/terminus';
 
+import { Public } from '@/auth/decorators/public.decorator';
+
 @ApiTags('health')
 @Controller('health')
 export class HealthController {
@@ -15,6 +17,7 @@ export class HealthController {
   ) {}
 
   @Get()
+  @Public()
   @HealthCheck()
   check() {
     return this.health.check([async () => this.mongoose.pingCheck('mongoose')]);
