@@ -25,7 +25,7 @@ const bootstrap = async () => {
   // https://docs.nestjs.com/security/helmet //
   app.use(
     helmet({
-      crossOriginResourcePolicy: false,
+      crossOriginResourcePolicy: true,
     }),
   );
 

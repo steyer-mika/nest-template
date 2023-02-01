@@ -51,7 +51,7 @@ export class AuthService {
       type: JwtTokenType.Refresh,
     };
 
-    const refreshOptions: JwtSignOptions = {
+    const refreshOptions: Partial<JwtSignOptions> = {
       expiresIn: this.configService.get<string>('auth.jwt.refreshExpiresIn'),
     };
 
