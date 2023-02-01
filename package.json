@@ -1,6 +1,6 @@
 {
   "name": "nest-template",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Nest Backend Template",
   "author": "Mika Steyer",
   "private": true,
@@ -40,7 +40,7 @@
     "@nestjs/throttler": "^3.1.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.0",
+    "class-validator": "^0.13.0",
     "compression": "^1.7.4",
     "helmet": "^6.0.0",
     "mongodb": "^4.12.1",
