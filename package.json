@@ -21,7 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "node dist/seeder",
     "seed:refresh": "node dist/seeder --refresh",
-    "seed:reset": "node dist/seeder/reset && node dist/seeder"
+    "seed:reset": "node dist/seeder/reset && node dist/seeder",
+    "doc:generate": "npx compodoc -p tsconfig.doc.json",
+    "doc:serve": "npx compodoc -s --port 4201"
   },
   "dependencies": {
     "@casl/ability": "^6.3.2",
@@ -53,6 +55,7 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.19",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
