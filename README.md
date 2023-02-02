@@ -67,6 +67,16 @@ Every Subject has multiple __Actions__ (default CURD Methods and Manage that rep
 
 **A user gets access to various actions on a subject based on there role.**
 
+### Verify Email
+
+After a user has registered or the endpoint `/auth/send-email-verification` has been called, an e-mail to verify the e-mail address is sent via an smtp server.
+
+Email Template can be edited under `src/mail/templates/*.hbs` and the frontend endpoints can be configured in `src/config/endpoints.ts`.
+
+To verify the users email call `/auth/verify-email`.
+
+**Note: All endpoints that are not GET requests cannot be called as long as the email is not verified**
+
 ---
 
 ## Features
