@@ -4,6 +4,7 @@
 
 ### Requirements
 
+- Node
 - NPM
 - Docker
 
@@ -97,7 +98,7 @@ To verify the users email call `/auth/verify-email`.
 ### Serve Static
 
 [Static Serve](https://docs.nestjs.com/recipes/serve-static)
-Serves all files in `client`
+Serves all files in `client`.
 
 ### Seeder
 
@@ -109,9 +110,9 @@ In `src/seeder` you can register the Schema for the Seeder.
 ### Logger
 
 [Custom Logger](https://docs.nestjs.com/techniques/logger) Service with [winston](https://github.com/gremo/nest-winston)
-Will print to `console` and to files in `logs/`
+Will print to `console` and to files in `logs/`.
 
-In develop it will print all logs to Log Level `Debug` and in production to Log Level `Info`
+In develop it will print all logs to Log Level `Debug` and in production to Log Level `Info`.
 
 All **HTTP Requests** will be logged with __Custom Middleware__.
 
@@ -119,7 +120,7 @@ All **HTTP Requests** will be logged with __Custom Middleware__.
 
 ### Health-checks
 
-[Health checks](https://docs.nestjs.com/recipes/terminus) are created to ensure that external services (like database) are available and can be accessed via `/health`
+[Health checks](https://docs.nestjs.com/recipes/terminus) are created to ensure that external services (like database) are available and can be accessed via `/health`.
 
 ### Rate Limiting
 
@@ -152,17 +153,17 @@ Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be config
 
 Automatic Project Documentation with [Compodoc](https://docs.nestjs.com/recipes/documentation)
 
-With `npm run doc:generate` you can generate the documentation for the current codebase
+With `npm run doc:generate` you can generate the documentation for the current codebase. 
 
-And with `doc:serve` you can visit it on `http://localhost:4201`
+And with `doc:serve` you can visit it on `http://localhost:4201`.
 
 ### API Documentation
 
 Automatic API Documentation with [Swagger](https://docs.nestjs.com/openapi/introduction)
 
-You can visit the API documentation under `/api` (Authorization is still required for secured endpoints)
+You can visit the API documentation under `/api` (Authorization is still required for secured endpoints).
 
-**[CLI Plugin](https://docs.nestjs.com/openapi/cli-plugin) will automatically add decorators for the documentation**
+**[CLI Plugin](https://docs.nestjs.com/openapi/cli-plugin) will automatically add decorators for the documentation.**
 
 ---
 
