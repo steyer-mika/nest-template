@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
@@ -7,6 +7,7 @@ import { UsersService } from '@api/users/users.service';
 import { User } from '@api/users/schemas/user.schema';
 import { UserDto } from '@api/users/dto/user.dto';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
+import { MailService } from '@/mail/mail.service';
 
 import { JwtAuthResponse, AuthPayload } from './jwt/types';
 import { JwtTokenType } from './jwt/enums';
@@ -14,9 +15,10 @@ import { JwtTokenType } from './jwt/enums';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-    private configService: ConfigService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly mailService: MailService,
   ) {}
 
   async validateUser(email: string, pass: string): Promise<User | null> {
@@ -31,7 +33,32 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto): Promise<JwtAuthResponse> {
     const registeredUser = await this.usersService.create(createUserDto);
+    this.sendEmailVerification(registeredUser);
     return this.login(registeredUser);
+  }
+
+  async sendEmailVerification(user: UserDto): Promise<string> {
+    const confirmationPayload: AuthPayload = {
+      email: user.email,
+      role: user.role,
+      sub: user.id,
+      type: JwtTokenType.Confirmation,
+    };
+
+    const confirmationOptions: Partial<JwtSignOptions> = {
+      expiresIn: this.configService.get<string>(
+        'auth.jwt.confirmationExpiresIn',
+      ),
+    };
+
+    const token = await this.jwtService.signAsync(
+      confirmationPayload,
+      confirmationOptions,
+    );
+
+    await this.mailService.sendUserConfirmation(user, token);
+
+    return `Email verification send to user with id ${user.id}`;
   }
 
   async login(user: UserDto): Promise<JwtAuthResponse> {
@@ -63,5 +90,16 @@ export class AuthService {
         refreshOptions,
       ),
     };
+  }
+
+  async verifyEmail(token: string): Promise<JwtAuthResponse> {
+    const payload: AuthPayload = await this.jwtService.verifyAsync(token);
+
+    if (payload.type !== JwtTokenType.Confirmation) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.usersService.verifyEmail(payload.sub);
+    return this.login(user);
   }
 }

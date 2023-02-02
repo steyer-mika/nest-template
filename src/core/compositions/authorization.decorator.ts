@@ -12,6 +12,6 @@ export const Authorization = (
   schema: unknown,
 ) => {
   return applyDecorators(
-    CheckPolicies((ability: AppAbility) => ability.can(action, schema)),
+    CheckPolicies((ability: AppAbility) => ability.can(Action[action], schema)),
   );
 };

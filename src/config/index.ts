@@ -14,6 +14,7 @@ export default () => ({
       secret: process.env.JWT_SECRET || '',
       expiresIn: process.env.JWT_EXPIRES_IN || '2d',
       refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+      confirmationExpiresIn: process.env.JWT_CONFIRMATION_EXPIRES_IN || '50d',
     },
   },
 
@@ -24,5 +25,13 @@ export default () => ({
 
   database: {
     uri: process.env.MONGODB_URI || '',
+  },
+
+  smtp: {
+    host: process.env.SMTP_HOST || '',
+    user: process.env.SMTP_USER || '',
+    password: process.env.SMTP_PASSWORD || '',
+    default: process.env.SMTP_DEFAULT || '',
+    port: parseInt(process.env.SMTP_PORT, 10) || 587,
   },
 });

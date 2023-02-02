@@ -16,6 +16,10 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
+  @Factory((faker) => faker.datatype.boolean())
+  @Prop({ required: true, default: false })
+  emailVerified: boolean;
+
   @Factory((faker) => faker.helpers.arrayElement(Object.values(Roles)))
   @Prop({ required: true, enum: Roles })
   role: Roles;

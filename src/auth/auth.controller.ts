@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { JwtAuthResponse } from './jwt/types';
+import { TokenDto } from '@/core/dto/token.dto';
 
 @ApiTags('auth')
 @ApiBearerAuth()
@@ -40,5 +41,16 @@ export class AuthController {
   @Post('refresh')
   async refresh(@User() user: UserDto): Promise<JwtAuthResponse> {
     return this.authService.login(user);
+  }
+
+  @Get('send-email-verification')
+  async sendEmailVerification(@User() user: UserDto): Promise<string> {
+    return this.authService.sendEmailVerification(user);
+  }
+
+  @Public()
+  @Post('verify-email')
+  async verifyEmail(@Body() tokenDto: TokenDto): Promise<JwtAuthResponse> {
+    return this.authService.verifyEmail(tokenDto.token);
   }
 }

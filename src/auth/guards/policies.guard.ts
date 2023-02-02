@@ -1,5 +1,11 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  MethodNotAllowedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { Request as ExpressRequest } from 'express';
 
 import {
   AppAbility,
@@ -25,7 +31,13 @@ export class PoliciesGuard implements CanActivate {
         context.getHandler(),
       ) || [];
 
+    const request: ExpressRequest = context.switchToHttp().getRequest();
+
     const { user } = context.switchToHttp().getRequest();
+
+    if (request.method !== 'GET' && !user.emailVerified) {
+      throw new MethodNotAllowedException('Email not verified.');
+    }
 
     const ability = this.caslAbilityFactory.createForUser(user);
 

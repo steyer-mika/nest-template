@@ -81,4 +81,18 @@ export class UsersService {
     const user = await this.userModel.findById(id).exec();
     return plainToInstance(UserDto, user);
   }
+
+  async verifyEmail(id: string): Promise<UserDto> {
+    const verifiedUser = await this.userModel.findByIdAndUpdate(
+      id,
+      {
+        emailVerified: true,
+      },
+      { new: true },
+    );
+
+    if (!verifiedUser) throw new NotFoundException();
+
+    return plainToInstance(UserDto, verifiedUser);
+  }
 }

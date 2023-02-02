@@ -22,4 +22,7 @@ export class UserDto {
 
   @Expose()
   readonly active: boolean;
+
+  @Expose()
+  readonly emailVerified: boolean;
 }

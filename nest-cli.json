@@ -10,6 +10,7 @@
           "classValidatorShim": true
         }
       }
-    ]
+    ],
+    "assets": ["mail/templates/**/*"]
   }
 }
