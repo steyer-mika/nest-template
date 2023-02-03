@@ -15,6 +15,7 @@ export default () => ({
       expiresIn: process.env.JWT_EXPIRES_IN || '2d',
       refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
       confirmationExpiresIn: process.env.JWT_CONFIRMATION_EXPIRES_IN || '50d',
+      resetPasswordExpiresIn: process.env.JWT_RESET_PASSWORD_EXPIRES_IN || '8h',
     },
   },
 

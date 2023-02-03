@@ -11,6 +11,9 @@ import { MailService } from '@/mail/mail.service';
 
 import { JwtAuthResponse, AuthPayload } from './jwt/types';
 import { JwtTokenType } from './jwt/enums';
+import { plainToInstance } from 'class-transformer';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { EmailDto } from './dto/email.dto';
 
 @Injectable()
 export class AuthService {
@@ -100,6 +103,55 @@ export class AuthService {
     }
 
     const user = await this.usersService.verifyEmail(payload.sub);
+    return this.login(user);
+  }
+
+  async sendResetPassword(emailDto: EmailDto): Promise<string> {
+    const userModel = await this.usersService.findByEmail(emailDto.email);
+    const user = plainToInstance(UserDto, userModel);
+
+    if (!user || !user.active) {
+      throw new UnauthorizedException();
+    }
+
+    const resetPasswordPayload: AuthPayload = {
+      email: user.email,
+      role: user.role,
+      sub: user.id,
+      type: JwtTokenType.ResetPassword,
+    };
+
+    const resetPasswordOptions: Partial<JwtSignOptions> = {
+      expiresIn: this.configService.get<string>(
+        'auth.jwt.resetPasswordExpiresIn',
+      ),
+    };
+
+    const token = await this.jwtService.signAsync(
+      resetPasswordPayload,
+      resetPasswordOptions,
+    );
+
+    await this.mailService.sendUserPasswordReset(user, token);
+
+    return `Reset password email send to user with id ${user.id}`;
+  }
+
+  async resetPassword(
+    resetPasswordDto: ResetPasswordDto,
+  ): Promise<JwtAuthResponse> {
+    const payload: AuthPayload = await this.jwtService.verifyAsync(
+      resetPasswordDto.password,
+    );
+
+    if (payload.type !== JwtTokenType.Confirmation) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.usersService.resetPassword(
+      payload.sub,
+      resetPasswordDto.password,
+    );
     return this.login(user);
   }
 }

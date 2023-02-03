@@ -70,13 +70,21 @@ Every Subject has multiple __Actions__ (default CURD Methods and Manage that rep
 
 ### Verify Email
 
-After a user has registered or the endpoint `/auth/send-email-verification` has been called, an e-mail to verify the e-mail address is sent via an smtp server.
+After a user has registered or the endpoint `/auth/email/email-verification` has been called, an e-mail to verify the e-mail address is sent via an smtp server.
 
-Email Template can be edited under `src/mail/templates/*.hbs` and the frontend endpoints can be configured in `src/config/endpoints.ts`.
+Email template can be edited under `src/mail/templates/*.hbs` and the frontend endpoints can be configured in `src/config/endpoints.ts`.
 
 To verify the users email call `/auth/verify-email`.
 
 **Note: All endpoints that are not GET requests cannot be called as long as the email is not verified**
+
+### Reset Password
+
+f a user forgets his password, he can send himself an email to reset his password. The endpoint is on `/auth/email/reset-password`.
+
+Reset password template can be edited under `src/mail/templates/*.hbs` and the frontend endpoints can be configured in `src/config/endpoints.ts`.
+
+To reset the password, the token and the new password must be sent to the endpoint `/auth/reset-password`.
 
 ---
 

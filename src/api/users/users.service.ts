@@ -16,6 +16,7 @@ import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
 
 @Injectable()
 export class UsersService {
@@ -94,5 +95,24 @@ export class UsersService {
     if (!verifiedUser) throw new NotFoundException();
 
     return plainToInstance(UserDto, verifiedUser);
+  }
+
+  async resetPassword(id: string, password: string): Promise<UserDto> {
+    const saltRounds = this.configService.get<number>('auth.salt');
+
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+
+    const user = await this.userModel.findById(id);
+
+    if (user.password === hash) {
+      throw new PasswordReusedException();
+    }
+
+    user.password = hash;
+
+    await user.save();
+
+    return plainToInstance(UserDto, user);
   }
 }

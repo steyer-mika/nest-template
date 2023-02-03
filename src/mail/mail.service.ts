@@ -12,7 +12,7 @@ export class MailService {
     private readonly configService: ConfigService,
   ) {}
 
-  async sendUserConfirmation(user: UserDto, token: string) {
+  async sendUserConfirmation(user: UserDto, token: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('frontend');
     const appName = this.configService.get<string>('app.name');
 
@@ -22,6 +22,23 @@ export class MailService {
       to: user.email,
       subject: `Welcome to ${appName}! Confirm your Email`,
       template: './confirmation',
+      context: {
+        name: user.username,
+        url,
+      },
+    });
+  }
+
+  async sendUserPasswordReset(user: UserDto, token: string): Promise<void> {
+    const frontendUrl = this.configService.get<string>('frontend');
+    const appName = this.configService.get<string>('app.name');
+
+    const url = `${frontendUrl}${endpoints.resetPassword}?token=${token}`;
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: `<${appName}> Reset your password.`,
+      template: './reset-password',
       context: {
         name: user.username,
         url,
