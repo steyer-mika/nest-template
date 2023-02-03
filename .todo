@@ -1,7 +1,3 @@
-- [] Reset Password
-  - [] Add reset password endpoints
-  - [] Add reset password mail template & mail service
-  - [] Describe reset password in readme
 - [] Tests
  - [] Unit Tests
   - [] Add Unit Tests User

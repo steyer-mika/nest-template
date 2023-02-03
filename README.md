@@ -24,11 +24,12 @@
 3. Configure `.package.json` (name, version, ...)
 4. Adjust `/client/index.html` (name)
 5. Replace `/client/favicon.ico`
-6. Install packages `npm install`
-7. Run `npm run start:dev`
+6. Add design to mail template
+7. Install packages `npm install`
+8. Run `npm run start:dev`
 
 Optional: 
-5. Open official NestJS Documentation `https://docs.nestjs.com/`
+9. Open official NestJS Documentation `https://docs.nestjs.com/`
 
 ---
 
