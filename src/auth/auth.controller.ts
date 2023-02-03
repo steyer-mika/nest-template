@@ -18,7 +18,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Get('me')
   async me(@User() user: UserDto): Promise<UserDto> {

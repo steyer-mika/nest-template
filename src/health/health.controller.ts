@@ -12,8 +12,8 @@ import { Public } from '@/auth/decorators/public.decorator';
 @Controller('health')
 export class HealthController {
   constructor(
-    private health: HealthCheckService,
-    private mongoose: MongooseHealthIndicator,
+    private readonly health: HealthCheckService,
+    private readonly mongoose: MongooseHealthIndicator,
   ) {}
 
   @Get()

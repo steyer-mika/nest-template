@@ -12,8 +12,8 @@ import { JwtTokenType } from '../jwt/enums';
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor(
-    configService: ConfigService,
-    private usersService: UsersService,
+    readonly configService: ConfigService,
+    private readonly usersService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
@@ -27,7 +27,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       throw new UnauthorizedException();
     }
 
-    const user = await this.usersService.getUserById(payload.sub);
+    const user = await this.usersService.find(payload.sub, false);
 
     if (!user || user.active !== true) throw new UnauthorizedException();
     return user;

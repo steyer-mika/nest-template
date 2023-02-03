@@ -6,31 +6,26 @@ import {
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 import { MongoError } from 'mongodb';
 
 import { DuplicateEmailException } from '@core/exceptions/duplicate-email.exception';
+import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
 
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
+import { hashPassword } from './utility';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private configService: ConfigService,
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
-    const saltRounds = this.configService.get<number>('auth.salt');
-
     try {
-      const salt = await bcrypt.genSalt(saltRounds);
-      const hash = await bcrypt.hash(createUserDto.password, salt);
+      const hash = await hashPassword(createUserDto.password);
 
       const createdUser = await this.userModel.create({
         ...createUserDto,
@@ -46,9 +41,9 @@ export class UsersService {
     }
   }
 
-  async find(id: string): Promise<UserDto> {
+  async find(id: string, nullCheck = true): Promise<UserDto> {
     const user = await this.userModel.findById(id).exec();
-    if (!user) throw new NotFoundException();
+    if (nullCheck && !user) throw new NotFoundException();
     return plainToInstance(UserDto, user);
   }
 
@@ -57,7 +52,10 @@ export class UsersService {
     return users.map((x) => plainToInstance(UserDto, x));
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserDto> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto | { emailVerified: boolean },
+  ): Promise<UserDto> {
     const updatedUser = await this.userModel.findByIdAndUpdate(
       id,
       updateUserDto,
@@ -78,39 +76,13 @@ export class UsersService {
     return this.userModel.findOne({ email });
   }
 
-  async getUserById(id: string): Promise<UserDto | undefined> {
-    const user = await this.userModel.findById(id).exec();
-    return plainToInstance(UserDto, user);
-  }
-
-  async verifyEmail(id: string): Promise<UserDto> {
-    const verifiedUser = await this.userModel.findByIdAndUpdate(
-      id,
-      {
-        emailVerified: true,
-      },
-      { new: true },
-    );
-
-    if (!verifiedUser) throw new NotFoundException();
-
-    return plainToInstance(UserDto, verifiedUser);
-  }
-
   async resetPassword(id: string, password: string): Promise<UserDto> {
-    const saltRounds = this.configService.get<number>('auth.salt');
-
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(password, salt);
-
+    const hash = await hashPassword(password);
     const user = await this.userModel.findById(id);
 
-    if (user.password === hash) {
-      throw new PasswordReusedException();
-    }
+    if (user.password === hash) throw new PasswordReusedException();
 
     user.password = hash;
-
     await user.save();
 
     return plainToInstance(UserDto, user);

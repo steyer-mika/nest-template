@@ -14,6 +14,7 @@ import { JwtTokenType } from './jwt/enums';
 import { plainToInstance } from 'class-transformer';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { EmailDto } from './dto/email.dto';
+import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
 
 @Injectable()
 export class AuthService {
@@ -26,12 +27,10 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<User | null> {
     const user = await this.usersService.findByEmail(email);
+    if (!user) return null;
 
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      return user;
-    }
-
-    return null;
+    const compared = await bcrypt.compare(pass, user.password);
+    return compared ? user : null;
   }
 
   async register(createUserDto: CreateUserDto): Promise<JwtAuthResponse> {
@@ -41,45 +40,22 @@ export class AuthService {
   }
 
   async sendEmailVerification(user: UserDto): Promise<string> {
-    const confirmationPayload: AuthPayload = {
-      email: user.email,
-      role: user.role,
-      sub: user.id,
-      type: JwtTokenType.Confirmation,
-    };
-
-    const confirmationOptions: Partial<JwtSignOptions> = {
-      expiresIn: this.configService.get<string>(
-        'auth.jwt.confirmationExpiresIn',
-      ),
-    };
-
-    const token = await this.jwtService.signAsync(
-      confirmationPayload,
-      confirmationOptions,
+    const expiresIn = this.configService.get<string>(
+      'auth.jwt.confirmationExpiresIn',
     );
 
-    await this.mailService.sendUserConfirmation(user, token);
+    const payload = tokenFactory(user, 'Confirmation');
+    const options = jwtOptionExpiresInFactory(expiresIn);
 
+    const token = await this.jwtService.signAsync(payload, options);
+
+    await this.mailService.sendUserConfirmation(user, token);
     return `Email verification send to user with id ${user.id}`;
   }
 
   async login(user: UserDto): Promise<JwtAuthResponse> {
-    const payload = {
-      email: user.email,
-      sub: user.id,
-      role: user.role,
-    };
-
-    const accessPayload: AuthPayload = {
-      ...payload,
-      type: JwtTokenType.Access,
-    };
-
-    const refreshPayload: AuthPayload = {
-      ...payload,
-      type: JwtTokenType.Refresh,
-    };
+    const accessPayload = tokenFactory(user, 'Access');
+    const refreshPayload = tokenFactory(user, 'Refresh');
 
     const refreshOptions: Partial<JwtSignOptions> = {
       expiresIn: this.configService.get<string>('auth.jwt.refreshExpiresIn'),
@@ -96,14 +72,19 @@ export class AuthService {
   }
 
   async verifyEmail(token: string): Promise<JwtAuthResponse> {
-    const payload: AuthPayload = await this.jwtService.verifyAsync(token);
+    try {
+      const payload: AuthPayload = await this.jwtService.verifyAsync(token);
+      if (payload.type !== JwtTokenType.Confirmation) {
+        throw new UnauthorizedException();
+      }
 
-    if (payload.type !== JwtTokenType.Confirmation) {
+      const user = await this.usersService.update(payload.sub, {
+        emailVerified: true,
+      });
+      return this.login(user);
+    } catch (error) {
       throw new UnauthorizedException();
     }
-
-    const user = await this.usersService.verifyEmail(payload.sub);
-    return this.login(user);
   }
 
   async sendResetPassword(emailDto: EmailDto): Promise<string> {
@@ -114,12 +95,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const resetPasswordPayload: AuthPayload = {
-      email: user.email,
-      role: user.role,
-      sub: user.id,
-      type: JwtTokenType.ResetPassword,
-    };
+    const resetPasswordPayload = tokenFactory(user, 'ResetPassword');
 
     const resetPasswordOptions: Partial<JwtSignOptions> = {
       expiresIn: this.configService.get<string>(
@@ -140,18 +116,22 @@ export class AuthService {
   async resetPassword(
     resetPasswordDto: ResetPasswordDto,
   ): Promise<JwtAuthResponse> {
-    const payload: AuthPayload = await this.jwtService.verifyAsync(
-      resetPasswordDto.password,
-    );
+    try {
+      const payload: AuthPayload = await this.jwtService.verifyAsync(
+        resetPasswordDto.password,
+      );
 
-    if (payload.type !== JwtTokenType.Confirmation) {
+      if (payload.type !== JwtTokenType.Confirmation) {
+        throw new UnauthorizedException();
+      }
+
+      const user = await this.usersService.resetPassword(
+        payload.sub,
+        resetPasswordDto.password,
+      );
+      return this.login(user);
+    } catch (error) {
       throw new UnauthorizedException();
     }
-
-    const user = await this.usersService.resetPassword(
-      payload.sub,
-      resetPasswordDto.password,
-    );
-    return this.login(user);
   }
 }

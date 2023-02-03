@@ -12,8 +12,8 @@ import { JwtTokenType } from '../jwt/enums';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    configService: ConfigService,
-    private usersService: UsersService,
+    readonly configService: ConfigService,
+    private readonly usersService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: LoginTokenPayload): Promise<UserDto> {
     if (payload.type !== JwtTokenType.Access) throw new UnauthorizedException();
 
-    const user = await this.usersService.getUserById(payload.sub);
+    const user = await this.usersService.find(payload.sub, false);
 
     if (!user || user.active !== true) throw new UnauthorizedException();
     return user;

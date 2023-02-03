@@ -13,7 +13,7 @@ import { UsersModule } from '@api/users/users.module';
 import { AuthModule } from '@auth/auth.module';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { PoliciesGuard } from '@auth/guards/policies.guard';
-import { MailModule } from './mail/mail.module';
+import { MailModule } from '@/mail/mail.module';
 
 @Module({
   imports: [
