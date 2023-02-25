@@ -9,7 +9,9 @@ export const getLoggerConfig = (env: string, appName: string) => {
     transports: [
       new transports.Console({
         format: format.combine(
-          format.timestamp(),
+          format.timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss',
+          }),
           format.ms(),
           utilities.format.nestLike(appName, {
             colors: true,
