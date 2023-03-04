@@ -27,18 +27,25 @@
 6. Add design to mail template
 7. Install packages `npm install`
 8. Start Database `docker-compose up`
-9. Run `npm run start:dev`
+9. Seed Database `npx prisma db seed`
+10. Run `npm run start:dev`
 
-Optional: 10. Open official NestJS Documentation `https://docs.nestjs.com/`
+Optional: 11. Open official NestJS Documentation `https://docs.nestjs.com/`
 
 ---
 
 ## Docker
 
-You could use local PostGres Database too.
+You could use local PostgreSQL Database too.
 
 1. Configure `.env` with `.env.docker`
 2. Start docker with `docker-compose up`
+
+---
+
+## Prisma Studio
+
+Open [Prisma Studio](https://www.prisma.io/studio) with `npx prisma studio` on localhost:5555
 
 ---
 
@@ -110,6 +117,8 @@ Serves all files in `client`.
 ### Seeds
 
 In prisma folder you can write your own seeds with `@faker-js/faker`.
+
+You can seed with `npx prisma db seed`
 
 ### Logger
 
