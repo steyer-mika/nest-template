@@ -1,28 +1,31 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { Roles } from '@auth/roles';
-import { ApiHideProperty } from '@nestjs/swagger';
+import { Role, User } from '@prisma/client';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class UserDto {
-  @Transform(({ obj }) => obj._id.toString())
-  @Expose({ name: '_id' })
-  readonly id: string;
-
+export class UserDto implements User {
   @Expose()
-  readonly username: string;
+  readonly id: number;
 
   @Expose()
   readonly email: string;
 
   @Expose()
-  readonly role: Roles;
+  readonly emailVerified: boolean;
 
   @ApiHideProperty()
   readonly password: string;
 
+  @ApiProperty({ enum: Object.values(Role) })
+  @Expose()
+  readonly role: Role;
+
   @Expose()
   readonly active: boolean;
 
-  @Expose()
-  readonly emailVerified: boolean;
+  @ApiHideProperty()
+  readonly createdAt: Date;
+
+  @ApiHideProperty()
+  readonly updatedAt: Date;
 }

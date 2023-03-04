@@ -1,35 +1,31 @@
-import {
-  AbilityBuilder,
-  ExtractSubjectType,
-  InferSubjects,
-  createMongoAbility,
-  AnyAbility,
-} from '@casl/ability';
+import { AbilityBuilder, PureAbility } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Roles } from '@auth/roles';
-import { User } from '@api/users/schemas/user.schema';
+import { Subjects, createPrismaAbility, PrismaQuery } from '@casl/prisma';
 
 import { Action } from './actions';
 import { UserDto } from '@api/users/dto/user.dto';
 
-type Subjects = InferSubjects<typeof User> | 'all';
+import { User, Role } from '@prisma/client';
 
-export type AppAbility = AnyAbility;
+export type AppSubjects = Subjects<{
+  User: User;
+}>;
 
+export type AppAbility = PureAbility<
+  [string, AppSubjects | 'all'],
+  PrismaQuery
+>;
 @Injectable()
 export class CaslAbilityFactory {
   createForUser(user: UserDto) {
-    const { can, build } = new AbilityBuilder(createMongoAbility);
+    const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-    if (user?.role === Roles.Admin) {
+    if (user.role === Role.Admin) {
       can(Action.Manage, 'all');
-    } else if (user?.role === Roles.User) {
-      can(Action.Read, User);
+    } else if (user.role === Role.User) {
+      can(Action.Manage, 'User', { id: user.id });
     }
 
-    return build({
-      detectSubjectType: (item) =>
-        item.constructor as ExtractSubjectType<Subjects>,
-    });
+    return build();
   }
 }

@@ -1,51 +1,15 @@
-version: '3.3'
+version: '3.8'
 services:
-  dev:
-    container_name: nest_template_dev
-    image: nest-template-dev:1.0.0
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    command: npm run start:dev
-    ports:
-      - 4200:4200
-      - 3001:9229
-    networks:
-      - nesjs-network
-    depends_on:
-      - mongodb
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    restart: unless-stopped
-  mongodb:
-    image : mongo:latest
-    container_name: mongodb
-    volumes:
-      - ./database:/data/db
-    ports:
-      - 27017:27017
-    networks:
-      - nesjs-network
+  postgres:
+    image: postgres:13.5
     restart: always
-  prod:
-    container_name: nest_template_prod
-    image: nest-template-prod:1.0.0
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    command: npm run start:prod
-    ports:
-      - 4200:4200
-      - 9229:9229
-    networks:
-      - nesjs-network
-    depends_on:
-      - mongodb
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    restart: unless-stopped
-networks:
-    nesjs-network:
-      driver: bridge
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgres:

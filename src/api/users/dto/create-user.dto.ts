@@ -1,14 +1,8 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsEnum,
-  IsString,
-  IsBoolean,
-} from 'class-validator';
+import { IsEmail, IsEnum } from 'class-validator';
+import { Role } from '@prisma/client';
 
-import { Roles } from '@auth/roles';
-import { IsPassword } from '@core/decorators/validation/isPassword.decorator';
-import { Match } from '@core/decorators/validation/match.decorator';
+import { IsPassword } from '@/core/decorators/validation/isPassword.decorator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @IsEmail()
@@ -17,16 +11,7 @@ export class CreateUserDto {
   @IsPassword()
   readonly password: string;
 
-  @Match('password')
-  readonly passwordConfirm: string;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly username: string;
-
-  @IsEnum(Roles)
-  readonly role: Roles;
-
-  @IsBoolean()
-  readonly active: boolean;
+  @ApiProperty({ enum: Object.values(Role) })
+  @IsEnum(Role)
+  readonly role: Role;
 }

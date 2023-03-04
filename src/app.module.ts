@@ -1,33 +1,26 @@
-import { APP_GUARD } from '@nestjs/core';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 
-import config from '@config';
-import { LoggerMiddleware } from '@core/middleware/logger.middleware';
-import { HealthModule } from '@/health/health.module';
-import { UsersModule } from '@api/users/users.module';
-import { AuthModule } from '@auth/auth.module';
-import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
-import { PoliciesGuard } from '@auth/guards/policies.guard';
+import environment from '@/config/environment';
+import { LoggerMiddleware } from '@/core/middleware/logger.middleware';
+import { PrismaModule } from '@/prisma/prisma.module';
+import { UsersModule } from '@/api/users/users.module';
 import { MailModule } from '@/mail/mail.module';
+import { AuthModule } from '@/auth/auth.module';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { PoliciesGuard } from '@/auth/guards/policies.guard';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [config],
-    }),
-
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('database.uri'),
-      }),
-      inject: [ConfigService],
+      load: [environment],
     }),
 
     ServeStaticModule.forRoot({
@@ -50,6 +43,7 @@ import { MailModule } from '@/mail/mail.module';
     AuthModule,
     UsersModule,
     MailModule,
+    PrismaModule,
   ],
   providers: [
     {

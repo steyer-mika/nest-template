@@ -17,30 +17,28 @@
 
 1. Clone Nest Template in empty folder
 2. Configure `.env`
-    * Replace `APP_NAME` with project name
-    * To generate `JWT_SECRET` use `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
-    * Adjust `MONGODB_URI`
-    * Set `FRONTEND_URL`
+   - Replace `APP_NAME` with project name
+   - To generate `JWT_SECRET` use `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
+   - Adjust `DATABASE_URL`
+   - Set `FRONTEND_URL`
 3. Configure `.package.json` (name, version, ...)
 4. Adjust `/client/index.html` (name)
 5. Replace `/client/favicon.ico`
 6. Add design to mail template
 7. Install packages `npm install`
-8. Run `npm run start:dev`
+8. Start Database `docker-compose up`
+9. Run `npm run start:dev`
 
-Optional: 
-9. Open official NestJS Documentation `https://docs.nestjs.com/`
+Optional: 10. Open official NestJS Documentation `https://docs.nestjs.com/`
 
 ---
 
 ## Docker
 
-If you don´t want to use the local MongoDB Server, you can use a Docker Image
+You could use local PostGres Database too.
 
 1. Configure `.env` with `.env.docker`
-2. Start docker with `docker-compose up dev -d`
-
-For production you can use `docker-compose up prod -d`
+2. Start docker with `docker-compose up`
 
 ---
 
@@ -54,7 +52,7 @@ Every Endpoint is secured by default. To disable this behavior you can use the `
 
 To access the secured endpoints you need a `Authorization Bearer Token` in the request headers.
 
-On `auth/login` you can post your `email` and `password` in return you get __accessToken__ and __refreshToken__.
+On `auth/login` you can post your `email` and `password` in return you get **accessToken** and **refreshToken**.
 
 Access Token is the Authorization Bearer Token
 
@@ -64,8 +62,8 @@ And with the Refresh Token you can refresh the Access Token on `auth/refresh` wi
 
 [CASL](https://casl.js.org/v6/en/)
 
-In CASL there every Schema is an __Subject__.
-Every Subject has multiple __Actions__ (default CURD Methods and Manage that represents all Actions).
+In CASL there every Schema is an **Subject**.
+Every Subject has multiple **Actions** (default CURD Methods and Manage that represents all Actions).
 
 **A user gets access to various actions on a subject based on there role.**
 
@@ -102,19 +100,16 @@ To reset the password, the token and the new password must be sent to the endpoi
 ### Cross-origin resource sharing
 
 [Cors](https://docs.nestjs.com/security/cors) is a mechanism that allows resources to be requested from another domain.
-**By default only the Frontend Url in .env is able to access backend** 
+**By default only the Frontend Url in .env is able to access backend**
 
 ### Serve Static
 
 [Static Serve](https://docs.nestjs.com/recipes/serve-static)
 Serves all files in `client`.
 
-### Seeder
+### Seeds
 
-[NestJS Seeder](https://www.npmjs.com/package/nestjs-seeder)
-In the Schema you can add `@Factory()` decorator witch will define the fake data of the attribute.
-
-In `src/seeder` you can register the Schema for the Seeder.
+In prisma folder you can write your own seeds with `@faker-js/faker`.
 
 ### Logger
 
@@ -123,7 +118,7 @@ Will print to `console` and to files in `logs/`.
 
 In develop it will print all logs to Log Level `Debug` and in production to Log Level `Info`.
 
-All **HTTP Requests** will be logged with __Custom Middleware__.
+All **HTTP Requests** will be logged with **Custom Middleware**.
 
 **BUG: When Module, Service or Controller is injected wrong, NestJS won`t log it due to the custom Logger Service.**
 
@@ -133,22 +128,22 @@ All **HTTP Requests** will be logged with __Custom Middleware__.
 
 ### Rate Limiting
 
-Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be configured in `.env`:  
+Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be configured in `.env`:
 
-* THROTTLER_TTL -> the number of seconds that each request will last in storage
-* THROTTLER_LIMIT -> the maximum number of requests within the TTL limit
+- THROTTLER_TTL -> the number of seconds that each request will last in storage
+- THROTTLER_LIMIT -> the maximum number of requests within the TTL limit
 
 ### Validation
 
 [Validation](https://docs.nestjs.com/techniques/validation) via DTO
 
-* [Available Rules](https://github.com/typestack/class-validator#validation-decorators)
-* [Available Transforms](https://github.com/typestack/class-transformer)
+- [Available Rules](https://github.com/typestack/class-validator#validation-decorators)
+- [Available Transforms](https://github.com/typestack/class-transformer)
 
-### MongoDB
+### Prisma
 
-[Mongoose](https://docs.nestjs.com/recipes/mongodb)
-[Mongodb](https://docs.nestjs.com/techniques/mongodb)
+[Prisma](https://www.prisma.io/)
+[Nest Prisma](https://docs.nestjs.com/recipes/prisma)
 
 ### Environment Variables
 
@@ -162,7 +157,7 @@ Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be config
 
 Automatic Project Documentation with [Compodoc](https://docs.nestjs.com/recipes/documentation)
 
-With `npm run doc:generate` you can generate the documentation for the current codebase. 
+With `npm run doc:generate` you can generate the documentation for the current codebase.
 
 And with `doc:serve` you can visit it on `http://localhost:4201`.
 
@@ -184,7 +179,7 @@ No Tests yet ):
 
 NestJS comes with a powerful [CLI Tool](https://docs.nestjs.com/cli/overview).
 
-But to generate CURDs you can use [Custom NestJS Template CLI](https://github.com/steyer-mika/nest-cli). This CLI is specifically designed to create CURDs for this __NestJS Template__.
+But to generate CURDs you can use [Custom NestJS Template CLI](https://github.com/steyer-mika/nest-cli). This CLI is specifically designed to create CURDs for this **NestJS Template**.
 
 ## Techniques
 
@@ -199,10 +194,6 @@ But to generate CURDs you can use [Custom NestJS Template CLI](https://github.co
 ### Lifecycle
 
 [Lifecycle](https://docs.nestjs.com/fundamentals/lifecycle-events)
-
-### MongoDB Hooks
-
-[MongoDB Hooks](https://docs.nestjs.com/techniques/mongodb#hooks-middleware)
 
 ### File Upload
 

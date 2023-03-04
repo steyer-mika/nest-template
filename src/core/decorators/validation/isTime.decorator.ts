@@ -5,7 +5,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { timeRegex } from 'src/utility/regex';
+import { timeRegex } from '@/utility/regex';
 
 @ValidatorConstraint({ async: false })
 export class IsTimeConstraint implements ValidatorConstraintInterface {

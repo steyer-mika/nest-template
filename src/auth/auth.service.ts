@@ -2,9 +2,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { User } from '@prisma/client';
 
 import { UsersService } from '@api/users/users.service';
-import { User } from '@api/users/schemas/user.schema';
 import { UserDto } from '@api/users/dto/user.dto';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { MailService } from '@/mail/mail.service';
@@ -78,9 +78,7 @@ export class AuthService {
         throw new UnauthorizedException();
       }
 
-      const user = await this.usersService.update(payload.sub, {
-        emailVerified: true,
-      });
+      const user = await this.usersService.verifyEmail(payload.sub);
       return this.login(user);
     } catch (error) {
       throw new UnauthorizedException();

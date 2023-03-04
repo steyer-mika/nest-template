@@ -5,7 +5,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { passwordRegex } from 'src/utility/regex';
+import { passwordRegex } from '@/utility/regex';
 
 @ValidatorConstraint({ async: false })
 export class IsPasswordConstraint implements ValidatorConstraintInterface {

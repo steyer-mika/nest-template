@@ -8,8 +8,6 @@
     <title>Nest Template API</title>
     <style>
       body {
-        user-select: none;
-
         margin: 0;
         height: 100vh;
         max-width: 1200px;
@@ -31,14 +29,32 @@
         text-align: center;
       }
 
+      *::selection {
+        background-color: #f1f1f1;
+        color: #222;
+      }
+
       h1,
       p {
         margin: 0;
       }
+
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+
+      img {
+        margin-left: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        object-fit: contain;
+      }
     </style>
   </head>
   <body>
-    <h1>Welcome to Nest Template API</h1>
+    <h1>
+      Welcome to <i>Nest Template API</i> <img src="/favicon.ico" alt="icon" />
+    </h1>
     <p>This is an private API, you won't be able to find anything here.</p>
   </body>
 </html>

@@ -6,7 +6,9 @@ export default () => ({
     port: parseInt(process.env.PORT, 10) || 4200,
   },
 
-  frontend: process.env.FRONTEND_URL || '',
+  frontend: {
+    url: process.env.FRONTEND_URL || '',
+  },
 
   auth: {
     salt: parseInt(process.env.SALT, 10) || 10,
@@ -14,8 +16,6 @@ export default () => ({
       secret: process.env.JWT_SECRET || '',
       expiresIn: process.env.JWT_EXPIRES_IN || '2d',
       refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
-      confirmationExpiresIn: process.env.JWT_CONFIRMATION_EXPIRES_IN || '50d',
-      resetPasswordExpiresIn: process.env.JWT_RESET_PASSWORD_EXPIRES_IN || '8h',
     },
   },
 
@@ -25,14 +25,6 @@ export default () => ({
   },
 
   database: {
-    uri: process.env.MONGODB_URI || '',
-  },
-
-  smtp: {
-    host: process.env.SMTP_HOST || '',
-    user: process.env.SMTP_USER || '',
-    password: process.env.SMTP_PASSWORD || '',
-    default: process.env.SMTP_DEFAULT || '',
-    port: parseInt(process.env.SMTP_PORT, 10) || 587,
+    uri: process.env.DATABASE_URL || '',
   },
 });

@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import compression from 'compression';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import * as compression from 'compression';
 
 import { AppModule } from '@/app.module';
-import validationConfig from '@config/validation.config';
-import { getLoggerConfig } from '@/config/logger.config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { LoggerConfig } from '@/config/logger';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule, {
@@ -16,8 +15,9 @@ const bootstrap = async () => {
 
   const config = app.get<ConfigService>(ConfigService);
 
-  // https://github.com/gremo/nest-winston
-  app.useLogger(getLoggerConfig(config.get('env'), config.get('app.name')));
+  // https://github.com/gremo/nest-winston //
+  const logger = new LoggerConfig(config);
+  app.useLogger(logger.service());
 
   // https://docs.nestjs.com/techniques/compression //
   app.use(compression());
@@ -38,7 +38,12 @@ const bootstrap = async () => {
   });
 
   // https://docs.nestjs.com/techniques/validation //
-  app.useGlobalPipes(new ValidationPipe(validationConfig));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+    }),
+  );
 
   // https://docs.nestjs.com/openapi/introduction //
   const swaggerConfig = new DocumentBuilder()
