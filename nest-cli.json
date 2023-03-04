@@ -11,6 +11,7 @@
         }
       }
     ],
-    "assets": ["mail/templates/**/*"]
+    "assets": ["mail/templates/**/*"],
+    "deleteOutDir": true
   }
 }

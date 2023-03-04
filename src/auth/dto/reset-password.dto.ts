@@ -1,11 +1,7 @@
-import { IsJWT } from 'class-validator';
-
 import { IsPassword } from '@/core/decorators/validation/isPassword.decorator';
+import { TokenDto } from './token.dto';
 
-export class ResetPasswordDto {
-  @IsJWT()
-  readonly token: string;
-
+export class ResetPasswordDto extends TokenDto {
   @IsPassword()
   readonly password: string;
 }

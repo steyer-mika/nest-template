@@ -24,7 +24,7 @@ import { HealthModule } from './health/health.module';
     }),
 
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
+      rootPath: join(__dirname, '../..', 'client'),
       serveStaticOptions: {
         fallthrough: false,
       },

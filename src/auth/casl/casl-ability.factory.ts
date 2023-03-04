@@ -23,7 +23,7 @@ export class CaslAbilityFactory {
     if (user.role === Role.Admin) {
       can(Action.Manage, 'all');
     } else if (user.role === Role.User) {
-      can(Action.Manage, 'User', { id: user.id });
+      can(Action.Manage, 'User');
     }
 
     return build();
