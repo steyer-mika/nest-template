@@ -1,3 +1,13 @@
-- fix docker
-- swagger design
-- swagger fav
+- Docker
+  - [ ] Add Full Docker Support
+- [] Jest
+  - [] Unit Tests
+    - [] Add Unit Tests User
+    - [] Add Unit Tests Auth
+    - [] Add Unit Tests Cli
+    - [] Describe Units Test readme
+  - [] End2End Tests
+    - [] Add End2End Test Auth
+    - [] Describe End2End Test readme
+- CASL
+  - Create wrapper for specific Models
