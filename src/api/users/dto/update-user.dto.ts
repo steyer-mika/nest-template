@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsEnum, IsString, IsBoolean } from 'class-validator';
-
-import { Roles } from '@auth/roles';
+import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
+import { IsBoolean, IsEmail, IsEnum } from 'class-validator';
 
 export class UpdateUserDto {
-  @IsNotEmpty()
-  @IsString()
-  readonly username: string;
+  @IsEmail()
+  readonly email?: string;
 
-  @IsEnum(Roles)
-  readonly role: Roles;
+  @ApiProperty({ enum: Object.values(Role) })
+  @IsEnum(Role)
+  readonly role?: Role;
 
   @IsBoolean()
-  readonly active: boolean;
+  readonly active?: boolean;
 }

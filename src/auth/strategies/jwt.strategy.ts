@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: LoginTokenPayload): Promise<UserDto> {
     if (payload.type !== JwtTokenType.Access) throw new UnauthorizedException();
 
-    const user = await this.usersService.find(payload.sub, false);
+    const user = await this.usersService.findOne(payload.sub, false);
 
     if (!user || user.active !== true) throw new UnauthorizedException();
     return user;

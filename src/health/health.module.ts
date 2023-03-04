@@ -1,23 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { TerminusModule } from '@nestjs/terminus';
 
 import { HealthController } from './health.controller';
+import { PrismaHealthIndicator } from './indicators/prisma.indicator';
 
 @Module({
-  imports: [
-    TerminusModule,
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('database.uri'),
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }),
-      inject: [ConfigService],
-    }),
-  ],
+  imports: [TerminusModule],
   controllers: [HealthController],
+  providers: [PrismaHealthIndicator],
 })
 export class HealthModule {}

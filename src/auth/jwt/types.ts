@@ -8,7 +8,7 @@ type JwtToken = {
 };
 
 export type AuthPayload = {
-  sub: string;
+  sub: number;
   email: string;
   role: string;
   type: JwtTokenType;

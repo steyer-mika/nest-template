@@ -23,7 +23,7 @@ export class MailService {
       subject: `Welcome to ${appName}! Confirm your Email`,
       template: './confirmation',
       context: {
-        name: user.username,
+        name: user.email,
         url,
       },
     });
@@ -40,7 +40,7 @@ export class MailService {
       subject: `<${appName}> Reset your password.`,
       template: './reset-password',
       context: {
-        name: user.username,
+        name: user.email,
         url,
       },
     });

@@ -1,90 +1,102 @@
 import {
   Injectable,
-  NotFoundException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import { plainToInstance } from 'class-transformer';
-import { MongoError } from 'mongodb';
+import { Prisma, User } from '@prisma/client';
 
-import { DuplicateEmailException } from '@core/exceptions/duplicate-email.exception';
-import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
+import { PrismaService } from '@/prisma/prisma.service';
+import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.exception';
 
-import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { hashPassword } from './utility';
+import { UserDto } from './dto/user.dto';
+import { ConfigService } from '@nestjs/config';
+import { hashPassword } from '@/auth/hash';
+import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private readonly prisma: PrismaService,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
     try {
-      const hash = await hashPassword(createUserDto.password);
-
-      const createdUser = await this.userModel.create({
-        ...createUserDto,
-        password: hash,
+      const saltRounds = this.configService.get<number>('auth.salt');
+      const hash = await hashPassword(createUserDto.password, saltRounds);
+      const user = await this.prisma.user.create({
+        data: {
+          ...createUserDto,
+          active: true,
+          emailVerified: false,
+          password: hash,
+        },
       });
-
-      return plainToInstance(UserDto, createdUser);
+      return plainToInstance(UserDto, user);
     } catch (error) {
-      if (error instanceof MongoError && error.code === 11000) {
-        throw new DuplicateEmailException();
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') throw new DuplicateEmailException();
       }
       throw new InternalServerErrorException();
     }
   }
 
-  async find(id: string, nullCheck = true): Promise<UserDto> {
-    const user = await this.userModel.findById(id).exec();
+  async findAll(): Promise<UserDto[]> {
+    const users = await this.prisma.user.findMany();
+    return users.map((x) => plainToInstance(UserDto, x));
+  }
+
+  async findOne(id: number, nullCheck = true): Promise<UserDto> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
     if (nullCheck && !user) throw new NotFoundException();
     return plainToInstance(UserDto, user);
   }
 
-  async findAll(): Promise<UserDto[]> {
-    const users = await this.userModel.find().exec();
-    return users.map((x) => plainToInstance(UserDto, x));
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<UserDto> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
+    if (!user) throw new NotFoundException();
+    return plainToInstance(UserDto, user);
   }
 
-  async update(
-    id: string,
-    updateUserDto: UpdateUserDto | { emailVerified: boolean },
-  ): Promise<UserDto> {
-    const updatedUser = await this.userModel.findByIdAndUpdate(
-      id,
-      updateUserDto,
-      {
-        new: true,
-      },
-    );
-    return plainToInstance(UserDto, updatedUser);
+  async remove(id: number): Promise<UserDto> {
+    const user = await this.prisma.user.delete({ where: { id } });
+    if (!user) throw new NotFoundException();
+    return plainToInstance(UserDto, user);
   }
 
-  async delete(id: string): Promise<string> {
-    const deletedUser = await this.userModel.findByIdAndDelete(id);
-    if (!deletedUser) throw new NotFoundException();
-    return `User with id ${deletedUser.id} has been deleted successfully.`;
+  async findByEmail(email: string): Promise<User | null> {
+    return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    return this.userModel.findOne({ email });
-  }
-
-  async resetPassword(id: string, password: string): Promise<UserDto> {
-    const hash = await hashPassword(password);
-    const user = await this.userModel.findById(id);
+  async resetPassword(id: number, password: string): Promise<UserDto> {
+    const saltRounds = this.configService.get<number>('auth.salt');
+    const hash = await hashPassword(password, saltRounds);
+    const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (user.password === hash) throw new PasswordReusedException();
 
-    user.password = hash;
-    await user.save();
+    this.prisma.user.update({
+      where: { id },
+      data: {
+        password: hash,
+      },
+    });
 
+    return plainToInstance(UserDto, user);
+  }
+
+  async verifyEmail(id: number): Promise<UserDto> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { emailVerified: true },
+    });
+    if (!user) throw new NotFoundException();
     return plainToInstance(UserDto, user);
   }
 }
