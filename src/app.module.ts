@@ -9,13 +9,13 @@ import { join } from 'path';
 
 import environment from '@/config/environment';
 import { LoggerMiddleware } from '@/core/middleware/logger.middleware';
-import { PrismaModule } from '@/prisma/prisma.module';
+import { PrismaModule } from '@/services/prisma/prisma.module';
 import { UsersModule } from '@/api/users/users.module';
-import { MailModule } from '@/mail/mail.module';
+import { MailModule } from '@/services/mail/mail.module';
 import { AuthModule } from '@/auth/auth.module';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { PoliciesGuard } from '@/auth/guards/policies.guard';
-import { HealthModule } from '@/health/health.module';
+import { HealthModule } from '@/services/health/health.module';
 import { validateEnvironmentVariables } from '@/core/validation/env.validation';
 
 @Module({

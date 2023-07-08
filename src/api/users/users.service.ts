@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 
-import { PrismaService } from '@/prisma/prisma.service';
+import { PrismaService } from '@/services/prisma/prisma.service';
 import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.exception';
 
 import { CreateUserDto } from './dto/create-user.dto';
