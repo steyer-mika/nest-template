@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 
 import { Authorization } from '@/core/compositions/authorization.decorator';
 

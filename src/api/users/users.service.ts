@@ -1,16 +1,15 @@
 import {
-  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, type User } from '@prisma/client';
 
 import { PrismaService } from '@/services/prisma/prisma.service';
 import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.exception';
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { type CreateUserDto } from './dto/create-user.dto';
+import { type UpdateUserDto } from './dto/update-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { hashPassword } from '@/auth/hash';
 import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';

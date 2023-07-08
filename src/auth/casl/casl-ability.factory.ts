@@ -1,9 +1,13 @@
-import { AbilityBuilder, PureAbility } from '@casl/ability';
+import { AbilityBuilder, type PureAbility } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { Subjects, createPrismaAbility, PrismaQuery } from '@casl/prisma';
+import {
+  type Subjects,
+  createPrismaAbility,
+  type PrismaQuery,
+} from '@casl/prisma';
 
 import { Action } from './actions';
-import { User, Role } from '@prisma/client';
+import { type User, Role } from '@prisma/client';
 
 export type AppSubjects = Subjects<{
   User: User;

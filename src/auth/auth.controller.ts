@@ -10,7 +10,7 @@ import { TokenDto } from '@/auth/dto/token.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
-import { JwtAuthResponse } from './jwt/types';
+import { type JwtAuthResponse } from './jwt/types';
 import { EmailDto } from './dto/email.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 

@@ -1,17 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '@api/users/users.service';
-import { CreateUserDto } from '@api/users/dto/create-user.dto';
+import { type CreateUserDto } from '@api/users/dto/create-user.dto';
 import { MailService } from '@/services/mail/mail.service';
 
-import { JwtAuthResponse, AuthPayload } from './jwt/types';
+import { type JwtAuthResponse, type AuthPayload } from './jwt/types';
 import { JwtTokenType } from './jwt/enums';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { EmailDto } from './dto/email.dto';
+import { type ResetPasswordDto } from './dto/reset-password.dto';
+import { type EmailDto } from './dto/email.dto';
 import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
 
 @Injectable()

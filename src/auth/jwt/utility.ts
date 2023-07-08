@@ -1,8 +1,8 @@
-import { JwtSignOptions } from '@nestjs/jwt';
-import { User } from '@prisma/client';
+import { type JwtSignOptions } from '@nestjs/jwt';
+import { type User } from '@prisma/client';
 
 import { JwtTokenType } from './enums';
-import { AuthPayload } from './types';
+import { type AuthPayload } from './types';
 
 export const tokenFactory = (
   user: User,

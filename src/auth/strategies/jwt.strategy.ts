@@ -4,9 +4,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { UsersService } from '@api/users/users.service';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 
-import { LoginTokenPayload } from '../jwt/types';
+import { type LoginTokenPayload } from '../jwt/types';
 import { JwtTokenType } from '../jwt/enums';
 
 @Injectable()
