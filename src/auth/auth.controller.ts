@@ -2,9 +2,9 @@ import { Controller, Post, UseGuards, Get, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
-import { UserDto } from '@api/users/dto/user.dto';
+import { User } from '@prisma/client';
 import { Public } from '@auth/decorators/public.decorator';
-import { User } from '@core/decorators/param/user.decorator';
+import { GetUser } from '@core/decorators/param/user.decorator';
 import { TokenDto } from '@/auth/dto/token.dto';
 
 import { AuthService } from './auth.service';
@@ -21,7 +21,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('me')
-  async me(@User() user: UserDto): Promise<UserDto> {
+  async me(@GetUser() user: User): Promise<User> {
     return user;
   }
 
@@ -34,19 +34,19 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@User() user: UserDto): Promise<JwtAuthResponse> {
+  async login(@GetUser() user: User): Promise<JwtAuthResponse> {
     return this.authService.login(user);
   }
 
   @Public()
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
-  async refresh(@User() user: UserDto): Promise<JwtAuthResponse> {
+  async refresh(@GetUser() user: User): Promise<JwtAuthResponse> {
     return this.authService.login(user);
   }
 
   @Get('email/email-verification')
-  async sendEmailVerification(@User() user: UserDto): Promise<string> {
+  async sendEmailVerification(@GetUser() user: User): Promise<string> {
     return this.authService.sendEmailVerification(user);
   }
 

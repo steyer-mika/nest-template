@@ -2,7 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { UserDto } from '@api/users/dto/user.dto';
+import { User } from '@prisma/client';
 import endpoints from '@/config/endpoints';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class MailService {
     private readonly configService: ConfigService,
   ) {}
 
-  async sendUserConfirmation(user: UserDto, token: string): Promise<void> {
+  async sendUserConfirmation(user: User, token: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('frontend');
     const appName = this.configService.get<string>('app.name');
 
@@ -29,7 +29,7 @@ export class MailService {
     });
   }
 
-  async sendUserPasswordReset(user: UserDto, token: string): Promise<void> {
+  async sendUserPasswordReset(user: User, token: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('frontend');
     const appName = this.configService.get<string>('app.name');
 
