@@ -1,11 +1,11 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { User } from '@prisma/client';
 
 import {
   AppAbility,
   CaslAbilityFactory,
 } from '@auth/casl/casl-ability.factory';
-import { UserDto } from '@/api/users/dto/user.dto';
 
 import {
   CHECK_POLICIES_KEY,
@@ -35,7 +35,7 @@ export class PoliciesGuard implements CanActivate {
         context.getHandler(),
       ) || [];
 
-    const user: UserDto = context.switchToHttp().getRequest().user;
+    const user: User = context.switchToHttp().getRequest().user;
 
     const ability = this.caslAbilityFactory.createForUser(user);
 

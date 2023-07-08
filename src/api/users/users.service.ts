@@ -1,9 +1,9 @@
 import {
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
 import { Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '@/prisma/prisma.service';
@@ -11,7 +11,6 @@ import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.excep
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
 import { ConfigService } from '@nestjs/config';
 import { hashPassword } from '@/auth/hash';
 import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
@@ -23,11 +22,11 @@ export class UsersService {
     private readonly configService: ConfigService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserDto> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const saltRounds = this.configService.get<number>('auth.salt');
       const hash = await hashPassword(createUserDto.password, saltRounds);
-      const user = await this.prisma.user.create({
+      return this.prisma.user.create({
         data: {
           ...createUserDto,
           active: true,
@@ -35,7 +34,6 @@ export class UsersService {
           password: hash,
         },
       });
-      return plainToInstance(UserDto, user);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') throw new DuplicateEmailException();
@@ -44,40 +42,43 @@ export class UsersService {
     }
   }
 
-  async findAll(): Promise<UserDto[]> {
-    const users = await this.prisma.user.findMany();
-    return users.map((x) => plainToInstance(UserDto, x));
+  async findAll(): Promise<User[]> {
+    return this.prisma.user.findMany();
   }
 
-  async findOne(id: number, nullCheck = true): Promise<UserDto> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
-    if (nullCheck && !user) throw new NotFoundException();
-    return plainToInstance(UserDto, user);
+  async findOne(id: number): Promise<User> {
+    try {
+      return this.prisma.user.findUniqueOrThrow({
+        where: { id },
+      });
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<UserDto> {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.prisma.user.update({
       where: { id },
       data: updateUserDto,
     });
     if (!user) throw new NotFoundException();
-    return plainToInstance(UserDto, user);
+    return user;
   }
 
-  async remove(id: number): Promise<UserDto> {
+  async remove(id: number): Promise<User> {
     const user = await this.prisma.user.delete({ where: { id } });
     if (!user) throw new NotFoundException();
-    return plainToInstance(UserDto, user);
+    return user;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findUniqueOrThrow({ where: { email } });
   }
 
-  async resetPassword(id: number, password: string): Promise<UserDto> {
+  async resetPassword(id: number, password: string): Promise<User> {
     const saltRounds = this.configService.get<number>('auth.salt');
     const hash = await hashPassword(password, saltRounds);
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUniqueOrThrow({ where: { id } });
 
     if (user.password === hash) throw new PasswordReusedException();
 
@@ -88,15 +89,15 @@ export class UsersService {
       },
     });
 
-    return plainToInstance(UserDto, user);
+    return user;
   }
 
-  async verifyEmail(id: number): Promise<UserDto> {
+  async verifyEmail(id: number): Promise<User> {
     const user = await this.prisma.user.update({
       where: { id },
       data: { emailVerified: true },
     });
     if (!user) throw new NotFoundException();
-    return plainToInstance(UserDto, user);
+    return user;
   }
 }

@@ -3,8 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { Subjects, createPrismaAbility, PrismaQuery } from '@casl/prisma';
 
 import { Action } from './actions';
-import { UserDto } from '@api/users/dto/user.dto';
-
 import { User, Role } from '@prisma/client';
 
 export type AppSubjects = Subjects<{
@@ -17,7 +15,7 @@ export type AppAbility = PureAbility<
 >;
 @Injectable()
 export class CaslAbilityFactory {
-  createForUser(user: UserDto) {
+  createForUser(user: User) {
     const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
     if (user.role === Role.Admin) {

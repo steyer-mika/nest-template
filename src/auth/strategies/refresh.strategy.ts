@@ -4,7 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { UsersService } from '@api/users/users.service';
-import { UserDto } from '@api/users/dto/user.dto';
+import { User } from '@prisma/client';
 
 import { LoginTokenPayload } from '../jwt/types';
 import { JwtTokenType } from '../jwt/enums';
@@ -22,12 +22,12 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     });
   }
 
-  async validate(payload: LoginTokenPayload): Promise<UserDto> {
+  async validate(payload: LoginTokenPayload): Promise<User> {
     if (payload.type !== JwtTokenType.Refresh) {
       throw new UnauthorizedException();
     }
 
-    const user = await this.usersService.findOne(payload.sub, false);
+    const user = await this.usersService.findOne(payload.sub);
 
     if (!user || user.active !== true) throw new UnauthorizedException();
     return user;

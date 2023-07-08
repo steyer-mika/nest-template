@@ -1,17 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '@api/users/users.service';
-import { UserDto } from '@api/users/dto/user.dto';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { MailService } from '@/mail/mail.service';
 
 import { JwtAuthResponse, AuthPayload } from './jwt/types';
 import { JwtTokenType } from './jwt/enums';
-import { plainToInstance } from 'class-transformer';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { EmailDto } from './dto/email.dto';
 import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
@@ -39,7 +37,7 @@ export class AuthService {
     return this.login(registeredUser);
   }
 
-  async sendEmailVerification(user: UserDto): Promise<string> {
+  async sendEmailVerification(user: User): Promise<string> {
     const expiresIn = this.configService.get<string>(
       'auth.jwt.confirmationExpiresIn',
     );
@@ -53,7 +51,7 @@ export class AuthService {
     return `Email verification send to user with id ${user.id}`;
   }
 
-  async login(user: UserDto): Promise<JwtAuthResponse> {
+  async login(user: User): Promise<JwtAuthResponse> {
     const accessPayload = tokenFactory(user, 'Access');
     const refreshPayload = tokenFactory(user, 'Refresh');
 
@@ -86,8 +84,7 @@ export class AuthService {
   }
 
   async sendResetPassword(emailDto: EmailDto): Promise<string> {
-    const userModel = await this.usersService.findByEmail(emailDto.email);
-    const user = plainToInstance(UserDto, userModel);
+    const user = await this.usersService.findByEmail(emailDto.email);
 
     if (!user || !user.active) {
       throw new UnauthorizedException();

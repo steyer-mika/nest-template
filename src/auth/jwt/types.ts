@@ -1,4 +1,4 @@
-import { UserDto } from '@api/users/dto/user.dto';
+import { User } from '@prisma/client';
 
 import { JwtTokenType } from './enums';
 
@@ -19,5 +19,5 @@ export type LoginTokenPayload = JwtToken & AuthPayload;
 export type JwtAuthResponse = {
   accessToken: string;
   refreshToken: string;
-  user: UserDto;
+  user: User;
 };
