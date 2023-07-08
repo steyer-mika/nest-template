@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '@api/users/users.service';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
-import { MailService } from '@/mail/mail.service';
+import { MailService } from '@/services/mail/mail.service';
 
 import { JwtAuthResponse, AuthPayload } from './jwt/types';
 import { JwtTokenType } from './jwt/enums';

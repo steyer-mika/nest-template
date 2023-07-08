@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
 import { UsersModule } from '@api/users/users.module';
-import { MailModule } from '@/mail/mail.module';
+import { MailModule } from '@/services/mail/mail.module';
 
 import { LocalStrategy } from './strategies/local.strategy';
 import { AuthService } from './auth.service';
