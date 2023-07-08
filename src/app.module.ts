@@ -14,12 +14,14 @@ import { MailModule } from '@/mail/mail.module';
 import { AuthModule } from '@/auth/auth.module';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { PoliciesGuard } from '@/auth/guards/policies.guard';
-import { HealthModule } from './health/health.module';
+import { HealthModule } from '@/health/health.module';
+import { validateEnvironmentVariables } from '@/core/validation/env.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validate: validateEnvironmentVariables,
       load: [environment],
     }),
 
