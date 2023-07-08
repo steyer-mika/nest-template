@@ -1,9 +1,10 @@
 import { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { join } from 'path';
 
 import environment from '@/config/environment';
@@ -19,6 +20,8 @@ import { validateEnvironmentVariables } from '@/core/validation/env.validation';
 
 @Module({
   imports: [
+    CacheModule.register(),
+
     ConfigModule.forRoot({
       isGlobal: true,
       validate: validateEnvironmentVariables,
@@ -51,6 +54,10 @@ import { validateEnvironmentVariables } from '@/core/validation/env.validation';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
     },
     {
       provide: APP_GUARD,
