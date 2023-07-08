@@ -1,15 +1,19 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  type CanActivate,
+  type ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 
 import {
-  AppAbility,
+  type AppAbility,
   CaslAbilityFactory,
 } from '@auth/casl/casl-ability.factory';
 
 import {
   CHECK_POLICIES_KEY,
-  PolicyHandler,
+  type PolicyHandler,
 } from '../decorators/polices.decorator';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 

@@ -1,6 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
 import { CheckPolicies } from '@auth/decorators/polices.decorator';
-import { AppAbility, AppSubjects } from '@/auth/casl/casl-ability.factory';
+import {
+  type AppAbility,
+  type AppSubjects,
+} from '@/auth/casl/casl-ability.factory';
 import { Action } from '@/auth/casl/actions';
 
 type ActionLiteral = keyof typeof Action;

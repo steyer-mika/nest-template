@@ -2,7 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 import endpoints from '@/config/endpoints';
 
 @Injectable()

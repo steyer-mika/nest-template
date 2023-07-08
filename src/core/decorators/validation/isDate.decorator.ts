@@ -1,8 +1,8 @@
 import {
   registerDecorator,
-  ValidationOptions,
+  type ValidationOptions,
   ValidatorConstraint,
-  ValidatorConstraintInterface,
+  type ValidatorConstraintInterface,
 } from 'class-validator';
 
 import { dateRegex } from '@/utility/regex';

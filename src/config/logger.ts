@@ -1,8 +1,8 @@
 import { join } from 'path';
 import { WinstonModule, utilities } from 'nest-winston';
 import { transports, format } from 'winston';
-import { ConfigService } from '@nestjs/config';
-import { LoggerService } from '@nestjs/common';
+import { type ConfigService } from '@nestjs/config';
+import { type LoggerService } from '@nestjs/common';
 
 export class LoggerConfig {
   private appName: string;

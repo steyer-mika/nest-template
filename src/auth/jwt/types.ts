@@ -1,6 +1,6 @@
-import { User } from '@prisma/client';
+import { type User } from '@prisma/client';
 
-import { JwtTokenType } from './enums';
+import { type JwtTokenType } from './enums';
 
 type JwtToken = {
   iat: number;
