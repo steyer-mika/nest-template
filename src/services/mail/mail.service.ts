@@ -1,16 +1,30 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
 import { type User } from '@prisma/client';
-import endpoints from '@/config/endpoints';
+import * as nodemailer from 'nodemailer';
 
+import endpoints from '@/config/endpoints';
+import { templateConfig } from './template.config';
 @Injectable()
 export class MailService {
-  constructor(
-    private readonly mailerService: MailerService,
-    private readonly configService: ConfigService,
-  ) {}
+  private transporter: nodemailer.Transporter;
+
+  constructor(private readonly configService: ConfigService) {
+    this.transporter = nodemailer.createTransport(
+      {
+        host: configService.get<string>('smtp.host'),
+        port: configService.get<number>('smtp.port'),
+        secure: true,
+        auth: {
+          user: configService.get<string>('smtp.user'),
+          pass: configService.get<string>('smtp.password'),
+        },
+      },
+      {
+        from: `"No Reply" <${configService.get<string>('smtp.default')}>`,
+      },
+    );
+  }
 
   async sendUserConfirmation(user: User, token: string): Promise<void> {
     const frontendUrl = this.configService.get<string>('frontend');
@@ -18,14 +32,13 @@ export class MailService {
 
     const url = `${frontendUrl}${endpoints.emailConfirm}?token=${token}`;
 
-    await this.mailerService.sendMail({
+    await this.transporter.sendMail({
       to: user.email,
       subject: `Welcome to ${appName}! Confirm your Email`,
-      template: './confirmation',
-      context: {
+      html: templateConfig['confirmation']({
         name: user.email,
         url,
-      },
+      }),
     });
   }
 
@@ -35,14 +48,13 @@ export class MailService {
 
     const url = `${frontendUrl}${endpoints.resetPassword}?token=${token}`;
 
-    await this.mailerService.sendMail({
+    await this.transporter.sendMail({
       to: user.email,
       subject: `<${appName}> Reset your password.`,
-      template: './reset-password',
-      context: {
+      html: templateConfig['reset-password']({
         name: user.email,
         url,
-      },
+      }),
     });
   }
 }
