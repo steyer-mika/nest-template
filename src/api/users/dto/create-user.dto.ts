@@ -1,8 +1,8 @@
 import { IsEmail, IsEnum } from 'class-validator';
 import { Role } from '@prisma/client';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { IsPassword } from '@/core/decorators/validation/isPassword.decorator';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @IsEmail()

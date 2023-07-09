@@ -8,7 +8,7 @@ import { Action } from '@/auth/casl/actions';
 
 type ActionLiteral = keyof typeof Action;
 
-type ActionType<TType> = TType extends 'Manage' ? never : TType;
+type ActionType<TType> = TType extends Action.Manage ? never : TType;
 
 export const Authorization = (
   action: ActionType<ActionLiteral>,

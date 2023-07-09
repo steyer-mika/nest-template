@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { type Prisma, type PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import * as dotenv from 'dotenv';
 import * as bcrypt from 'bcrypt';
