@@ -15,8 +15,6 @@
   - read [](https://docs.nestjs.com/recipes/passport)
 - [] Mail
   - [] Improve mail Service
-- DTO
-  - check out [](https://docs.nestjs.com/techniques/serialization)
 - Logger 
   - fix logging bug [](https://docs.nestjs.com/techniques/logger)
 - [] Jest [](https://docs.nestjs.com/fundamentals/testing)
