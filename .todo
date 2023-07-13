@@ -15,9 +15,6 @@
   - read [](https://docs.nestjs.com/recipes/passport)
 - [] Mail
   - [] Improve mail Service
-- validation
-  - forbidNonWhitelisted forbidUnknownValues [](https://docs.nestjs.com/techniques/validation)
-  - OmitType && DTO [](https://docs.nestjs.com/techniques/validation#mapped-types)
 - DTO
   - check out [](https://docs.nestjs.com/techniques/serialization)
 - Logger 

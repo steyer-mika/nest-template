@@ -1,15 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
-import { IsBoolean, IsEmail, IsEnum } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateUserDto } from './create-user.dto';
 
-export class UpdateUserDto {
-  @IsEmail()
-  readonly email?: string;
-
-  @ApiProperty({ enum: Object.values(Role) })
-  @IsEnum(Role)
-  readonly role?: Role;
-
-  @IsBoolean()
-  readonly active?: boolean;
-}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
