@@ -1,4 +1,6 @@
-# Nest Template
+# <ins>Nest Template</ins>
+
+---
 
 ## Setup for Development
 
@@ -13,7 +15,7 @@
 - Prettier
 - EsLint
 
-(__Hint: install the extensions under `.vscode/extensions.json`__)
+(_Hint: install the extensions under `.vscode/extensions.json`_)
 
 ### Step for Step Setup
 
@@ -158,6 +160,12 @@ Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be config
 [Prisma](https://www.prisma.io/)
 [Nest Prisma](https://docs.nestjs.com/recipes/prisma)
 
+#### Migrations
+[Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate) database with `npx prisma migrate dev --name ${__name__}`. Replace migration name `${__name__}`
+
+#### Transactions
+Use [Transactions](https://www.prisma.io/docs/concepts/components/prisma-client/transactions) with `prisma.$transaction([ ... ])`.
+
 ### Environment Variables
 
 [Configuration](https://docs.nestjs.com/techniques/configuration)
@@ -188,9 +196,13 @@ You can visit the API documentation under `/api` (Authorization is still require
 
 No Tests yet ):
 
+---
+
 ## CLI
 
 NestJS comes with a powerful [CLI Tool](https://docs.nestjs.com/cli/overview).
+
+---
 
 ## Techniques
 
