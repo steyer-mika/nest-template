@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import userSeed from './seeds/user.seed';
+import userSeeder from './seeds/user.seeder';
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,7 @@ async function main() {
     await prisma.user.deleteMany({});
 
     // seed user table
-    await userSeed(prisma, 5);
+    await userSeeder(prisma, 5);
   } catch (error) {
     console.error(error);
   } finally {

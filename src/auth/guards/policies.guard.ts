@@ -15,7 +15,7 @@ import {
   CHECK_POLICIES_KEY,
   type PolicyHandler,
 } from '@auth/decorators/polices.decorator';
-import { IS_PUBLIC_KEY } from '@auth/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from '@/auth/decorators/public.decorator';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {

@@ -3,7 +3,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { User } from '@prisma/client';
-import { Public } from '@auth/decorators/public.decorator';
+
+import { Public } from '@/auth/decorators/public.decorator';
 import { GetUser } from '@core/decorators/param/user.decorator';
 import { TokenDto } from '@/auth/dto/token.dto';
 

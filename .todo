@@ -1,5 +1,3 @@
-- Docker
-  - [ ] Add Full Docker Support
 - [] Jest [](https://docs.nestjs.com/fundamentals/testing)
   - [] Unit Tests
     - [] Add Unit Tests User
