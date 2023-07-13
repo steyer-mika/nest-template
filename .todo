@@ -15,9 +15,6 @@
   - read [](https://docs.nestjs.com/recipes/passport)
 - [] Mail
   - [] Improve mail Service
-- Middleware
-  - ignore middleware on favicon/images [](https://docs.nestjs.com/middleware)
-  - ? add timestamp [](https://docs.nestjs.com/middleware)
 - validation
   - forbidNonWhitelisted forbidUnknownValues [](https://docs.nestjs.com/techniques/validation)
   - OmitType && DTO [](https://docs.nestjs.com/techniques/validation#mapped-types)
