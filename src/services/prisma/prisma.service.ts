@@ -1,5 +1,3 @@
-// src/prisma/prisma.service.ts
-
 import { type INestApplication, Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 

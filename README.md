@@ -13,22 +13,26 @@
 - Prettier
 - EsLint
 
+(__Hint: install the extensions under `.vscode/extensions.json`__)
+
 ### Step for Step Setup
 
-1. Clone Nest Template in empty folder
-2. Configure `.env`
-   - Replace `APP_NAME` with project name
-   - To generate `JWT_SECRET` use `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
-   - Adjust `DATABASE_URL`
-   - Set `FRONTEND_URL`
-3. Configure `.package.json` (name, version, ...)
-4. Adjust `/client/index.html` (name)
-5. Replace `/client/favicon.ico`
-6. Add design to mail template
-7. Install packages `npm install`
-8. Start Database `docker-compose up`
-9. Seed Database `npx prisma db seed`
-10. Run `npm run start:dev`
+1. clone Nest Template in empty folder
+2. configure `.env`
+   - replace `APP_NAME` with project name
+   - generate `JWT_SECRET` using `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
+   - adjust `DATABASE_URL`
+   - set `FRONTEND_URL`
+   - set SMTP config
+3. configure `.package.json` (name, version, ...)
+4. adjust `/client/index.html` (name)
+5. replace `/client/favicon.ico`
+6. add design to mail template
+7. install packages `npm install`
+8. start database `docker-compose up`
+9. sync database `npx prisma migrate deploy`
+9. seed database `npx prisma db seed`
+10. run `npm run start:dev`
 
 Optional: 11. Open official NestJS Documentation `https://docs.nestjs.com/`
 
@@ -38,7 +42,7 @@ Optional: 11. Open official NestJS Documentation `https://docs.nestjs.com/`
 
 You could use local PostgreSQL Database too.
 
-1. Configure `.env` with `.env.docker`
+1. Configure `.env` with `.env.development`
 2. Start docker with `docker-compose up`
 
 ---
@@ -187,8 +191,6 @@ No Tests yet ):
 ## CLI
 
 NestJS comes with a powerful [CLI Tool](https://docs.nestjs.com/cli/overview).
-
-But to generate CURDs you can use [Custom NestJS Template CLI](https://github.com/steyer-mika/nest-cli). This CLI is specifically designed to create CURDs for this **NestJS Template**.
 
 ## Techniques
 
