@@ -1,6 +1,6 @@
 - Docker
   - [ ] Add Full Docker Support
-- [] Jest
+- [] Jest [](https://docs.nestjs.com/fundamentals/testing)
   - [] Unit Tests
     - [] Add Unit Tests User
     - [] Add Unit Tests Auth
@@ -9,11 +9,32 @@
   - [] End2End Tests
     - [] Add End2End Test Auth
     - [] Describe End2End Test readme
+  - Mock 
+    - Automock for tests [](https://docs.nestjs.com/recipes/automock)
 - [] CASL
   - [] Create wrapper for specific Models
 - [] Prisma
   - [] Improve Readme
   - [] Log when Database is not connected
   - [] Decide weather to use DTO or not
+  - [] add transactions [](https://www.prisma.io/docs/concepts/components/prisma-client/transactions)
+  - [] add soft delete [](https://docs.nestjs.com/techniques/task-scheduling) [](https://www.prisma.io/docs/concepts/components/prisma-client/middleware/soft-delete-middleware)
 - [] Mail
   - [] Improve mail Service
+- Middleware
+  - ignore middleware on favicon/images [](https://docs.nestjs.com/middleware)
+  - ? add timestamp [](https://docs.nestjs.com/middleware)
+- validation
+  - forbidNonWhitelisted forbidUnknownValues [](https://docs.nestjs.com/techniques/validation)
+  - OmitType && DTO [](https://docs.nestjs.com/techniques/validation#mapped-types)
+- DTO
+  - check out [](https://docs.nestjs.com/techniques/serialization)
+- Logger 
+  - fix logging bug [](https://docs.nestjs.com/techniques/logger)
+- Auth
+  - auth bearer to cookies [](https://docs.nestjs.com/techniques/cookies)
+  - ? jwt token to [](https://docs.nestjs.com/techniques/session)
+  - ? rework auth [](https://docs.nestjs.com/security/authentication)
+  - ? rework other auth [](https://docs.nestjs.com/security/authorization) [](https://casl.js.org/v6/en/package/casl-prisma)
+  - ? check config for [](https://docs.nestjs.com/security/helmet)?
+  - read [](https://docs.nestjs.com/recipes/passport)
