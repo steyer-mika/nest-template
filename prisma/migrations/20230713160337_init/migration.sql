@@ -9,6 +9,7 @@ CREATE TABLE "User" (
     "role" "Role" NOT NULL,
     "active" BOOLEAN NOT NULL,
     "emailVerified" BOOLEAN NOT NULL,
+    "deletedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

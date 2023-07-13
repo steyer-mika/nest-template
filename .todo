@@ -4,8 +4,7 @@
   - [] Improve Readme
   - [] Log when Database is not connected
   - [] Decide weather to use DTO or not
-  - [] add transactions [](https://www.prisma.io/docs/concepts/components/prisma-client/transactions)
-  - [] add soft delete [](https://docs.nestjs.com/techniques/task-scheduling) [](https://www.prisma.io/docs/concepts/components/prisma-client/middleware/soft-delete-middleware)
+  - [] update softdelete to not use deprecated $extends [](https://docs.nestjs.com/techniques/task-scheduling) [](https://www.prisma.io/docs/concepts/components/prisma-client/middleware/soft-delete-middleware)
 - Auth
   - auth bearer to cookies [](https://docs.nestjs.com/techniques/cookies)
   - ? jwt token to [](https://docs.nestjs.com/techniques/session)
