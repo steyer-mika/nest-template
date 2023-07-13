@@ -9,11 +9,7 @@ export class LoggerMiddleware implements NestMiddleware {
     const { method, originalUrl } = request;
 
     response.on('finish', () => {
-      const { statusCode } = response;
-
-      if (originalUrl === '/favicon.ico') return;
-
-      this.logger.log(`${method} ${originalUrl} ${statusCode} `);
+      this.logger.log(`${method} ${originalUrl} ${response.statusCode} `);
     });
 
     next();

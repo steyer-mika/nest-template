@@ -71,6 +71,6 @@ import { validateEnvironmentVariables } from '@/core/validation/env.validation';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('api/*');
   }
 }
