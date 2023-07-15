@@ -1,17 +1,10 @@
-- [] CASL
-  - [] Create wrapper for specific Models
 - [] Prisma
   - [] Improve Readme
   - [] Log when Database is not connected
-  - [] Decide weather to use DTO or not
   - [] update softdelete to not use deprecated $extends [](https://docs.nestjs.com/techniques/task-scheduling) [](https://www.prisma.io/docs/concepts/components/prisma-client/middleware/soft-delete-middleware)
 - Auth
   - auth bearer to cookies [](https://docs.nestjs.com/techniques/cookies)
-  - ? jwt token to [](https://docs.nestjs.com/techniques/session)
-  - ? rework auth [](https://docs.nestjs.com/security/authentication)
-  - ? rework other auth [](https://docs.nestjs.com/security/authorization) [](https://casl.js.org/v6/en/package/casl-prisma)
-  - ? check config for [](https://docs.nestjs.com/security/helmet)?
-  - read [](https://docs.nestjs.com/recipes/passport)
+  - rework auth [](https://docs.nestjs.com/security/authorization) [](https://casl.js.org/v6/en/package/casl-prisma)
 - [] Mail
   - [] Improve mail Service
 - Logger 
