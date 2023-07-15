@@ -33,10 +33,10 @@
 7. install packages `npm install`
 8. start database `docker-compose up`
 9. sync database `npx prisma migrate deploy`
-9. seed database `npx prisma db seed`
-10. run `npm run start:dev`
+10. seed database `npx prisma db seed`
+11. run `npm run start:dev`
 
-Optional: 11. Open official NestJS Documentation `https://docs.nestjs.com/`
+Optional: 12. Open official NestJS Documentation `https://docs.nestjs.com/`
 
 ---
 
