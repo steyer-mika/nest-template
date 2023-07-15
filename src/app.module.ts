@@ -20,7 +20,14 @@ import { validateEnvironmentVariables } from '@/core/validation/env.validation';
 
 @Module({
   imports: [
-    CacheModule.register(),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        ttl: configService.get<number>('cache.ttl'),
+        limit: configService.get<number>('cache.limit'),
+      }),
+    }),
 
     ConfigModule.forRoot({
       isGlobal: true,
