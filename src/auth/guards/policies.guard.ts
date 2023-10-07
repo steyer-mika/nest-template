@@ -9,12 +9,11 @@ import { type User } from '@prisma/client';
 import {
   type AppAbility,
   CaslAbilityFactory,
-} from '@auth/casl/casl-ability.factory';
-
+} from '@/auth/casl/casl-ability.factory';
 import {
   CHECK_POLICIES_KEY,
   type PolicyHandler,
-} from '@auth/decorators/polices.decorator';
+} from '@/auth/decorators/polices.decorator';
 import { IS_PUBLIC_KEY } from '@/auth/decorators/public.decorator';
 
 @Injectable()

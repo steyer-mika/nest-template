@@ -1,10 +1,11 @@
 {
   "recommendations": [
-    "streetsidesoftware.code-spell-checker",
-    "mikestead.dotenv",
-    "ms-azuretools.vscode-docker",
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "prisma.prisma"
+    "mikestead.dotenv",
+    "aaron-bond.better-comments",
+    "streetsidesoftware.code-spell-checker",
+    "exodiusstudios.comment-anchors",
+    "christian-kohler.path-intellisense",
+    "esbenp.prettier-vscode"
   ]
 }

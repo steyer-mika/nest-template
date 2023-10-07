@@ -4,7 +4,7 @@ import userSeeder from './seeds/user.seeder';
 
 const prisma = new PrismaClient();
 
-async function main() {
+const main = async () => {
   try {
     // delete all tables
     await prisma.user.deleteMany({});
@@ -16,6 +16,6 @@ async function main() {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 main();

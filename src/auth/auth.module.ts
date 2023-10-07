@@ -1,24 +1,20 @@
 import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService, ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
-import { UsersModule } from '@api/users/users.module';
+import { UserModule } from '@/api/user/user.module';
 import { MailModule } from '@/services/mail/mail.module';
 
-import { LocalStrategy } from './strategies/local.strategy';
-import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshStrategy } from './strategies/refresh.strategy';
 import { CaslAbilityFactory } from './casl/casl-ability.factory';
 
 @Module({
   imports: [
-    UsersModule,
-    MailModule,
-    PassportModule,
-
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -29,7 +25,13 @@ import { CaslAbilityFactory } from './casl/casl-ability.factory';
       }),
       inject: [ConfigService],
     }),
+
+    PassportModule,
+
+    MailModule,
+    UserModule,
   ],
+  controllers: [AuthController],
   providers: [
     AuthService,
     LocalStrategy,
@@ -37,7 +39,6 @@ import { CaslAbilityFactory } from './casl/casl-ability.factory';
     RefreshStrategy,
     CaslAbilityFactory,
   ],
-  controllers: [AuthController],
   exports: [CaslAbilityFactory],
 })
 export class AuthModule {}

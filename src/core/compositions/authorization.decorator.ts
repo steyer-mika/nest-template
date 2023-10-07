@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { CheckPolicies } from '@auth/decorators/polices.decorator';
+
+import { CheckPolicies } from '@/auth/decorators/polices.decorator';
 import {
   type AppAbility,
   type AppSubjects,

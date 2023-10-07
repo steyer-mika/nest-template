@@ -8,7 +8,7 @@ import {
 import { passwordRegex } from '@/utility/regex';
 
 @ValidatorConstraint({ async: false })
-export class IsPasswordConstraint implements ValidatorConstraintInterface {
+class IsPasswordConstraint implements ValidatorConstraintInterface {
   validate(password: unknown) {
     if (typeof password !== 'string') return false;
     return passwordRegex.test(password);
@@ -16,9 +16,9 @@ export class IsPasswordConstraint implements ValidatorConstraintInterface {
 }
 
 export const IsPassword = (validationOptions?: ValidationOptions) => {
-  return (object: unknown, propertyName: string) => {
+  return (object: unknown, propertyName: string) =>
     registerDecorator({
-      target: object.constructor,
+      target: object!.constructor,
       propertyName,
       options: {
         message: `${propertyName} must contain at least one uppercase letter, one lowercase letter, one special character, and one digit`,
@@ -27,5 +27,4 @@ export const IsPassword = (validationOptions?: ValidationOptions) => {
       constraints: [],
       validator: IsPasswordConstraint,
     });
-  };
 };

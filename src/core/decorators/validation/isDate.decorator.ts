@@ -8,7 +8,7 @@ import {
 import { dateRegex } from '@/utility/regex';
 
 @ValidatorConstraint({ async: false })
-export class IsDateConstraint implements ValidatorConstraintInterface {
+class IsDateConstraint implements ValidatorConstraintInterface {
   validate(date: unknown) {
     if (typeof date !== 'string') return false;
     return dateRegex.test(date);
@@ -18,7 +18,7 @@ export class IsDateConstraint implements ValidatorConstraintInterface {
 export const IsDate = (validationOptions?: ValidationOptions) => {
   return (object: unknown, propertyName: string) => {
     registerDecorator({
-      target: object.constructor,
+      target: object!.constructor,
       propertyName,
       options: {
         message: `${propertyName} must be a valid date. Format: YYYY-MM-DD.`,

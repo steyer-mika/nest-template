@@ -1,5 +1,4 @@
 import { type Prisma, type PrismaClient } from '@prisma/client';
-import { faker } from '@faker-js/faker';
 import * as dotenv from 'dotenv';
 import * as bcrypt from 'bcrypt';
 
@@ -7,11 +6,12 @@ export default async (prisma: PrismaClient, quantity: number) => {
   dotenv.config();
 
   const users: Prisma.UserCreateInput[] = [];
-  const salt = await bcrypt.genSalt(parseInt(process.env.SALT));
+  const salt = await bcrypt.genSalt(parseInt(process.env.SALT || '10'));
 
   users.push({
     email: 'admin@nest-template.com',
     role: 'Admin',
+    username: 'Admin',
     password: await bcrypt.hash('AdminAdmin1!', salt),
     emailVerified: true,
     active: true,
@@ -19,11 +19,12 @@ export default async (prisma: PrismaClient, quantity: number) => {
 
   for (let count = 0; count < quantity; count++) {
     users.push({
-      email: faker.internet.email(),
+      email: `user-${count + 1}@nest-template.com`,
+      username: `User ${count + 1}`,
       role: 'User',
       password: await bcrypt.hash('TestTest1!', salt),
-      emailVerified: faker.datatype.boolean(),
-      active: faker.datatype.boolean(),
+      emailVerified: true,
+      active: true,
     });
   }
 

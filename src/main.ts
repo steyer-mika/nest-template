@@ -1,14 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpStatus, ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import compression from 'compression';
 
 import { AppModule } from '@/app.module';
 import { LoggerConfig } from '@/config/logger';
 
-const bootstrap = async () => {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: false,
   });
@@ -34,7 +34,7 @@ const bootstrap = async () => {
 
   // https://docs.nestjs.com/security/cors //
   app.enableCors({
-    origin: config.get<string>('frontend'),
+    origin: config.getOrThrow<string>('frontend'),
   });
 
   // https://docs.nestjs.com/techniques/validation //
@@ -47,9 +47,9 @@ const bootstrap = async () => {
 
   // https://docs.nestjs.com/openapi/introduction //
   const swaggerConfig = new DocumentBuilder()
-    .setTitle(config.get<string>('app.name'))
-    .setDescription(`${config.get<string>('app.name')} API`)
-    .setVersion(process.env.npm_package_version)
+    .setTitle(config.getOrThrow<string>('app.name'))
+    .setDescription(`${config.getOrThrow<string>('app.name')} API`)
+    .setVersion(process.env.npm_package_version || '0.0.1')
     .addBearerAuth()
     .build();
 
@@ -58,7 +58,6 @@ const bootstrap = async () => {
     customfavIcon: 'favicon.ico',
   });
 
-  await app.listen(config.get<number>('app.port'));
-};
-
+  await app.listen(config.getOrThrow<number>('app.port'));
+}
 bootstrap();

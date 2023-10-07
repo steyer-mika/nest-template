@@ -1,3 +1,19 @@
 {
-  "cSpell.words": ["casl"]
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [
+    {
+      "column": 80,
+      "color": "#32CD3255"
+    },
+    {
+      "column": 120,
+      "color": "#cdc83255"
+    },
+    {
+      "column": 160,
+      "color": "#cd323255"
+    }
+  ],
+  "cSpell.words": ["casl", "prisma", "tsbuildinfo"]
 }

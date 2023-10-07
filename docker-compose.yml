@@ -2,6 +2,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13.5
+    container_name: 'nest-template'
     restart: always
     environment:
       - POSTGRES_USER=root

@@ -1,14 +1,7 @@
 - [] Prisma
   - [] Improve Readme
-  - [] Log when Database is not connected
-  - [] update softdelete to not use deprecated $extends [](https://docs.nestjs.com/techniques/task-scheduling) [](https://www.prisma.io/docs/concepts/components/prisma-client/middleware/soft-delete-middleware)
-- Auth
-  - auth bearer to cookies [](https://docs.nestjs.com/techniques/cookies)
-  - rework auth [](https://docs.nestjs.com/security/authorization) [](https://casl.js.org/v6/en/package/casl-prisma)
-- [] Mail
-  - [] Improve mail Service
-- Logger 
-  - fix logging bug [](https://docs.nestjs.com/techniques/logger)
+- Logger
+  - fix logging bug (winston logger does not log nest errors like circular dependencies) [](https://docs.nestjs.com/techniques/logger)
 - [] Jest [](https://docs.nestjs.com/fundamentals/testing)
   - [] Unit Tests
     - [] Add Unit Tests User
@@ -18,5 +11,5 @@
   - [] End2End Tests
     - [] Add End2End Test Auth
     - [] Describe End2End Test readme
-  - Mock 
+  - Mock
     - Automock for tests [](https://docs.nestjs.com/recipes/automock)

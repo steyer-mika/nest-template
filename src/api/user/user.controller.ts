@@ -13,32 +13,26 @@ import { type User } from '@prisma/client';
 
 import { Authorization } from '@/core/compositions/authorization.decorator';
 
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiBearerAuth()
-@ApiTags('users')
+@ApiTags('Users')
 @Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Post()
   @Authorization('Create', 'User')
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Get()
-  @Authorization('Read', 'User')
-  async findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+    return this.userService.create(createUserDto);
   }
 
   @Get(':id')
   @Authorization('Read', 'User')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
-    return this.usersService.findOne(id);
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')
@@ -47,12 +41,12 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.update(id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @Authorization('Delete', 'User')
-  async remove(@Param('id', ParseIntPipe) id: number): Promise<User> {
-    return this.usersService.remove(id);
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return this.userService.delete(id);
   }
 }

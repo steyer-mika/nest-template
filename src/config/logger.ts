@@ -9,8 +9,8 @@ export class LoggerConfig {
   private level: string;
 
   constructor(configService: ConfigService) {
-    const env = configService.get<string>('env');
-    this.appName = configService.get<string>('app.name');
+    const env = configService.getOrThrow<string>('env');
+    this.appName = configService.getOrThrow<string>('app.name');
     this.level = env === 'dev' ? 'debug' : 'info';
   }
 
@@ -30,7 +30,7 @@ export class LoggerConfig {
           ),
         }),
         new transports.File({
-          dirname: join(__dirname, `./../../logs/${this.level}/`),
+          dirname: join(__dirname, `./../logs/${this.level}/`),
           filename: `${this.level}.log`,
           level: this.level,
           format: format.combine(

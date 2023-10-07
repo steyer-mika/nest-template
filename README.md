@@ -6,8 +6,8 @@
 
 ### Requirements
 
-- Node
-- NPM
+- Node (~ v20.8.0)
+- NPM (~ v10.2.0)
 - Docker
 
 ### VS Code Extensions
@@ -25,11 +25,11 @@
    - generate `JWT_SECRET` using `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
    - adjust `DATABASE_URL`
    - set `FRONTEND_URL`
-   - set SMTP config
+   - set MailJet Config
 3. configure `.package.json` (name, version, ...)
 4. adjust `/client/index.html` (name)
 5. replace `/client/favicon.ico`
-6. add design to mail template
+6. add mail templates
 7. install packages `npm install`
 8. start database `docker-compose up`
 9. sync database `npx prisma migrate deploy`
@@ -161,9 +161,11 @@ Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be config
 [Nest Prisma](https://docs.nestjs.com/recipes/prisma)
 
 #### Migrations
+
 [Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate) database with `npx prisma migrate dev --name ${__name__}`. Replace migration name `${__name__}`
 
 #### Transactions
+
 Use [Transactions](https://www.prisma.io/docs/concepts/components/prisma-client/transactions) with `prisma.$transaction([ ... ])`.
 
 ### Environment Variables
@@ -194,7 +196,7 @@ You can visit the API documentation under `/api` (Authorization is still require
 
 ## Tests
 
-No Tests yet ):
+No Tests yet :(
 
 ---
 

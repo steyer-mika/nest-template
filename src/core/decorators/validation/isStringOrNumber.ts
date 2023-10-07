@@ -6,9 +6,7 @@ import {
 } from 'class-validator';
 
 @ValidatorConstraint({ async: false })
-export class IsStringOrNumberConstraint
-  implements ValidatorConstraintInterface
-{
+class IsStringOrNumberConstraint implements ValidatorConstraintInterface {
   validate(value: unknown) {
     const type = typeof value;
     return type === 'string' || type === 'number';
@@ -18,7 +16,7 @@ export class IsStringOrNumberConstraint
 export const IsStringOrNumber = (validationOptions?: ValidationOptions) => {
   return (object: unknown, propertyName: string) => {
     registerDecorator({
-      target: object.constructor,
+      target: object!.constructor,
       propertyName,
       options: {
         message: `${propertyName} must be a string or number.`,

@@ -1,60 +1,113 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import type { RequestData } from 'node-mailjet/declarations/request/Request';
+import { type LibraryResponse, Client } from 'node-mailjet';
 import { type User } from '@prisma/client';
-import * as nodemailer from 'nodemailer';
 
+import { extractUserCredentials } from '@/utility/user/extract-user-credentials';
 import endpoints from '@/config/endpoints';
-import { templateConfig } from './template.config';
+import mailjetConfig from '@/config/mailjet';
+
+import type {
+  ResetPasswordVariables,
+  VerifyEmailVariables,
+} from './email.interfaces';
+
 @Injectable()
 export class MailService {
-  private transporter: nodemailer.Transporter;
+  private readonly mailjet: Client;
+
+  private readonly logger = new Logger(MailService.name);
 
   constructor(private readonly configService: ConfigService) {
-    this.transporter = nodemailer.createTransport(
-      {
-        host: configService.get<string>('smtp.host'),
-        port: configService.get<number>('smtp.port'),
-        secure: true,
-        auth: {
-          user: configService.get<string>('smtp.user'),
-          pass: configService.get<string>('smtp.password'),
-        },
-      },
-      {
-        from: `"No Reply" <${configService.get<string>('smtp.default')}>`,
-      },
+    const apiKey = configService.getOrThrow<string>('mail.key.public');
+    const apiSecret = configService.getOrThrow<string>('mail.key.private');
+
+    this.mailjet = new Client({
+      apiKey,
+      apiSecret,
+    });
+  }
+
+  async sendUserEmailVerification(user: User, jwtToken: string) {
+    const userCredentials = extractUserCredentials(user);
+
+    const frontendUrl = this.configService.get<string>('frontend.url');
+
+    const variables: VerifyEmailVariables = {
+      verifyEmailLink: `${frontendUrl}/${endpoints.emailConfirm}?token=${jwtToken}`,
+    };
+
+    return this.sendMail(
+      mailjetConfig.templates.verifyEmail.id,
+      mailjetConfig.templates.verifyEmail.subject,
+      variables,
+      user.email,
+      userCredentials,
     );
   }
 
-  async sendUserConfirmation(user: User, token: string): Promise<void> {
-    const frontendUrl = this.configService.get<string>('frontend');
-    const appName = this.configService.get<string>('app.name');
+  async sendUserPasswordReset(user: User, jwtToken: string) {
+    const userCredentials = extractUserCredentials(user);
 
-    const url = `${frontendUrl}${endpoints.emailConfirm}?token=${token}`;
+    const frontendUrl = this.configService.get<string>('frontend.url');
 
-    await this.transporter.sendMail({
-      to: user.email,
-      subject: `Welcome to ${appName}! Confirm your Email`,
-      html: templateConfig['confirmation']({
-        name: user.email,
-        url,
-      }),
-    });
+    const variables: ResetPasswordVariables = {
+      resetPasswordLink: `${frontendUrl}/${endpoints.resetPassword}?token=${jwtToken}`,
+    };
+
+    return this.sendMail(
+      mailjetConfig.templates.resetPassword.id,
+      mailjetConfig.templates.resetPassword.subject,
+      variables,
+      user.email,
+      userCredentials,
+    );
   }
 
-  async sendUserPasswordReset(user: User, token: string): Promise<void> {
-    const frontendUrl = this.configService.get<string>('frontend');
-    const appName = this.configService.get<string>('app.name');
+  private sendMail(
+    templateId: number,
+    subject: string,
+    variables: Record<string, unknown>,
+    emailTo: string,
+    nameTo: string,
+    attachments?: Iterable<Record<string, string>>,
+    cc?: { Email: string; Name: string }[],
+  ): Promise<LibraryResponse<RequestData>> {
+    const env = this.configService.get<string>('env');
 
-    const url = `${frontendUrl}${endpoints.resetPassword}?token=${token}`;
+    if (env !== 'production' && env !== 'staging') {
+      return Promise.reject(
+        `${subject} Mail didn't fire because env is not production! Current ${env}.`,
+      );
+    }
 
-    await this.transporter.sendMail({
-      to: user.email,
-      subject: `<${appName}> Reset your password.`,
-      html: templateConfig['reset-password']({
-        name: user.email,
-        url,
-      }),
-    });
+    try {
+      return this.mailjet.post('send', { version: 'v3.1' }).request({
+        Messages: [
+          {
+            From: {
+              Email: mailjetConfig.from,
+              Name: mailjetConfig.name,
+            },
+            To: [
+              {
+                Email: emailTo,
+                Name: nameTo,
+              },
+            ],
+            TemplateID: templateId,
+            TemplateLanguage: true,
+            Subject: subject,
+            Variables: variables,
+            Attachments: attachments,
+            Cc: cc,
+          },
+        ],
+      });
+    } catch (error) {
+      this.logger.error(`Mail Service: ${error}`);
+      return Promise.reject(error);
+    }
   }
 }

@@ -1,22 +1,25 @@
-import { type MiddlewareConsumer, type NestModule } from '@nestjs/common';
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import {
+  type MiddlewareConsumer,
+  Module,
+  type NestModule,
+} from '@nestjs/common';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ConfigService, ConfigModule } from '@nestjs/config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { join } from 'path';
 
-import environment from '@/config/environment';
+import { validateEnvironmentVariables } from '@/core/validation/environment';
 import { LoggerMiddleware } from '@/core/middleware/logger.middleware';
-import { PrismaModule } from '@/services/prisma/prisma.module';
-import { UsersModule } from '@/api/users/users.module';
-import { MailModule } from '@/services/mail/mail.module';
-import { AuthModule } from '@/auth/auth.module';
+import environment from '@/config/environment';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { PoliciesGuard } from '@/auth/guards/policies.guard';
+import { AuthModule } from '@/auth/auth.module';
+import { UserModule } from '@/api/user/user.module';
 import { HealthModule } from '@/services/health/health.module';
-import { validateEnvironmentVariables } from '@/core/validation/env.validation';
+import { MailModule } from '@/services/mail/mail.module';
+import { PrismaModule } from '@/services/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -39,21 +42,24 @@ import { validateEnvironmentVariables } from '@/core/validation/env.validation';
       rootPath: join(__dirname, '../..', 'client'),
       serveStaticOptions: {
         fallthrough: false,
+        redirect: false,
       },
     }),
 
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        ttl: configService.get<number>('throttler.ttl'),
-        limit: configService.get<number>('throttler.limit'),
-      }),
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: configService.getOrThrow<number>('throttler.ttl'),
+          limit: configService.getOrThrow<number>('throttler.limit'),
+        },
+      ],
     }),
 
     HealthModule,
     AuthModule,
-    UsersModule,
+    UserModule,
     MailModule,
     PrismaModule,
   ],

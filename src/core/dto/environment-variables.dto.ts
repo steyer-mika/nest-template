@@ -4,10 +4,10 @@ import {
   Min,
   IsString,
   IsUrl,
-  IsEmail,
   Max,
+  IsNotEmpty,
 } from 'class-validator';
-import { IsStringOrNumber } from '@core/decorators/validation/isStringOrNumber';
+import { IsStringOrNumber } from '@/core/decorators/validation/isStringOrNumber';
 
 enum Environment {
   development = 'development',
@@ -19,6 +19,7 @@ export class EnvironmentVariablesDto {
   @IsEnum(Environment)
   NODE_ENV: Environment;
 
+  @IsNotEmpty()
   @IsString()
   APP_NAME: string;
 
@@ -31,18 +32,23 @@ export class EnvironmentVariablesDto {
   @Min(0)
   SALT: number;
 
+  @IsNotEmpty()
   @IsStringOrNumber()
   JWT_SECRET: string;
 
+  @IsNotEmpty()
   @IsStringOrNumber()
   JWT_EXPIRES_IN: string | number;
 
+  @IsNotEmpty()
   @IsStringOrNumber()
   JWT_REFRESH_EXPIRES_IN: string | number;
 
+  @IsNotEmpty()
   @IsStringOrNumber()
   JWT_CONFIRMATION_EXPIRES_IN: string | number;
 
+  @IsNotEmpty()
   @IsStringOrNumber()
   JWT_RESET_PASSWORD_EXPIRES_IN: string | number;
 
@@ -59,23 +65,6 @@ export class EnvironmentVariablesDto {
   })
   FRONTEND_URL: string;
 
-  @IsString()
-  SMTP_HOST: string;
-
-  @IsEmail()
-  SMTP_USER: string;
-
-  @IsString()
-  SMTP_PASSWORD: string;
-
-  @IsEmail()
-  SMTP_DEFAULT: string;
-
-  @IsNumber()
-  @Min(0)
-  @Max(65535)
-  SMTP_PORT: number;
-
   @IsNumber()
   @Min(0)
   THROTTLER_TTL: number;
@@ -91,4 +80,12 @@ export class EnvironmentVariablesDto {
   @IsNumber()
   @Min(0)
   CACHE_MAX: number;
+
+  @IsNotEmpty()
+  @IsString()
+  MAILJET_API_KEY_PUBLIC: string;
+
+  @IsNotEmpty()
+  @IsString()
+  MAILJET_API_KEY_PRIVATE: string;
 }

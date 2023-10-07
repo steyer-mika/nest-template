@@ -3,7 +3,7 @@ export default () => ({
 
   app: {
     name: process.env.APP_NAME,
-    port: parseInt(process.env.PORT, 10),
+    port: parseInt(process.env.PORT || '4200', 10),
   },
 
   frontend: {
@@ -11,7 +11,7 @@ export default () => ({
   },
 
   auth: {
-    salt: parseInt(process.env.SALT, 10),
+    salt: parseInt(process.env.SALT || '10', 10),
     jwt: {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_EXPIRES_IN,
@@ -22,8 +22,8 @@ export default () => ({
   },
 
   throttler: {
-    ttl: parseInt(process.env.THROTTLER_TTL, 10),
-    limit: parseInt(process.env.THROTTLER_LIMIT, 10),
+    ttl: parseInt(process.env.THROTTLER_TTL || '60', 10),
+    limit: parseInt(process.env.THROTTLER_LIMIT || '20', 10),
   },
 
   database: {
@@ -31,7 +31,14 @@ export default () => ({
   },
 
   cache: {
-    ttl: parseInt(process.env.CACHE_TTL, 10),
-    max: parseInt(process.env.CACHE_MAX, 10),
+    ttl: parseInt(process.env.CACHE_TTL || '10', 10),
+    max: parseInt(process.env.CACHE_MAX || '5', 10),
+  },
+
+  mail: {
+    key: {
+      private: process.env.MAILJET_API_KEY_PRIVATE,
+      public: process.env.MAILJET_API_KEY_PUBLIC,
+    },
   },
 });

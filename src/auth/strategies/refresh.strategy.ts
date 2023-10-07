@@ -4,15 +4,15 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { type User } from '@prisma/client';
 
-import { UsersService } from '@api/users/users.service';
-import { type LoginTokenPayload } from '@auth/jwt/types';
-import { JwtTokenType } from '@auth/jwt/enums';
+import { type LoginTokenPayload } from '@/auth/jwt/types';
+import { JwtTokenType } from '@/auth/jwt/enums';
+import { PrismaService } from '@/services/prisma/prisma.service';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor(
     readonly configService: ConfigService,
-    private readonly usersService: UsersService,
+    private readonly prisma: PrismaService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
@@ -26,7 +26,11 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       throw new UnauthorizedException();
     }
 
-    const user = await this.usersService.findOne(payload.sub);
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: payload.sub,
+      },
+    });
 
     if (!user || user.active !== true) throw new UnauthorizedException();
     return user;

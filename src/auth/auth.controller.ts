@@ -1,11 +1,11 @@
 import { Controller, Post, UseGuards, Get, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { CreateUserDto } from '@api/users/dto/create-user.dto';
+import { CreateUserDto } from '@/api/user/dto/create-user.dto';
 import { User } from '@prisma/client';
 
 import { Public } from '@/auth/decorators/public.decorator';
-import { GetUser } from '@core/decorators/param/user.decorator';
+import { GetUser } from '@/core/decorators/param/user.decorator';
 import { TokenDto } from '@/auth/dto/token.dto';
 
 import { AuthService } from './auth.service';
@@ -15,7 +15,7 @@ import { type JwtAuthResponse } from './jwt/types';
 import { EmailDto } from './dto/email.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 
-@ApiTags('auth')
+@ApiTags('Authentication')
 @ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
