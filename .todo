@@ -1,5 +1,7 @@
 - [] Prisma
   - [] Improve Readme
+- [] Mailjet
+  - [] Fix readme
 - Logger
   - fix logging bug (winston logger does not log nest errors like circular dependencies) [](https://docs.nestjs.com/techniques/logger)
 - [] Jest [](https://docs.nestjs.com/fundamentals/testing)
