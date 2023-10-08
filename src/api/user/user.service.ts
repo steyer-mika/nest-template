@@ -26,6 +26,7 @@ export class UserService {
           ...createUserDto,
           active: true,
           emailVerified: false,
+          role: 'User',
           password: hash,
         },
       });

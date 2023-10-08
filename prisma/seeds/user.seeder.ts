@@ -1,6 +1,6 @@
 import { type Prisma, type PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 export default async (prisma: PrismaClient, quantity: number) => {
   dotenv.config();
