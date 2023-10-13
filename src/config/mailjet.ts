@@ -1,17 +1,17 @@
-import { LangService } from '@/services/lang/lang.service';
+import { TranslationService } from '@/services/translation/translation.service';
 
 export default {
-  from: 'noreply@nest-template.com',
-  name: 'Nest Template',
+  from: 'noreply@motion-impact.com',
+  name: 'Motion Impact',
 
   templates: {
     resetPassword: {
       id: 0,
-      subject: LangService.t('Mail.ResetPassword'),
+      subject: TranslationService.t('Mail.ResetPassword'),
     },
     verifyEmail: {
       id: 0,
-      subject: LangService.t('Mail.VerifyEmail'),
+      subject: TranslationService.t('Mail.VerifyEmail'),
     },
   },
 } as const;

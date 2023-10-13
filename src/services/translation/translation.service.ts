@@ -1,7 +1,6 @@
-import type { LocaleName, Translation } from './i18n';
-import { findDeep, locales } from './i18n';
+import { LocaleName, Translation, findDeep, locales } from './i18n';
 
-export class LangService {
+export class TranslationService {
   public static locale: LocaleName = 'en';
 
   public static t(
