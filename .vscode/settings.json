@@ -1,6 +1,5 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.rulers": [
     {
       "column": 80,
@@ -15,5 +14,9 @@
       "color": "#cd323255"
     }
   ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
   "cSpell.words": ["casl", "prisma", "tsbuildinfo"]
 }

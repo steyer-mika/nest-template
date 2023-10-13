@@ -6,6 +6,7 @@
     "streetsidesoftware.code-spell-checker",
     "exodiusstudios.comment-anchors",
     "christian-kohler.path-intellisense",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "prisma.prisma"
   ]
 }
