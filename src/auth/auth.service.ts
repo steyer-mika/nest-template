@@ -6,9 +6,9 @@ import bcrypt from 'bcrypt';
 
 import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
 import { UserDto } from '@/api/user/dto/user.dto';
+import { UserService } from '@/api/user/user.service';
 import { MailService } from '@/services/mail/mail.service';
 import { PrismaService } from '@/services/prisma/prisma.service';
-import { UserService } from '@/api/user/user.service';
 
 import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
 import { JwtTokenType } from './jwt/enums';
@@ -26,6 +26,12 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
+  /**
+   * Validate a user's email and password during login.
+   * @param email - The user's email.
+   * @param pass - The user's password.
+   * @returns A UserDto or null if validation fails.
+   */
   async validateUser(email: string, pass: string): Promise<UserDto | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -37,12 +43,22 @@ export class AuthService {
     return isSamePassword ? plainToInstance(UserDto, user) : null;
   }
 
+  /**
+   * Register a new user, send email verification, and log in.
+   * @param createUserDto - Data for creating a new user.
+   * @returns A JWT authentication response.
+   */
   async register(createUserDto: CreateUserDto): Promise<JwtAuthResponse> {
     const registeredUser = await this.userService.create(createUserDto);
     this.sendEmailVerification(registeredUser);
     return this.login(registeredUser);
   }
 
+  /**
+   * Send an email for email verification.
+   * @param user - The user to send the email verification to.
+   * @returns A message indicating the success of the email verification request.
+   */
   async sendEmailVerification(user: UserDto): Promise<string> {
     const expiresIn = this.configService.getOrThrow<string>(
       'auth.jwt.confirmationExpiresIn',
@@ -54,9 +70,14 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload, options);
 
     await this.mailService.sendUserEmailVerification(user, token);
-    return `Email verification send to user with id ${user.id}`;
+    return `Email verification sent to user with id ${user.id}`;
   }
 
+  /**
+   * Log in a user.
+   * @param user - The user to log in.
+   * @returns A JWT authentication response.
+   */
   async login(user: UserDto): Promise<JwtAuthResponse> {
     const accessPayload = tokenFactory(user, 'Access');
     const refreshPayload = tokenFactory(user, 'Refresh');
@@ -75,6 +96,11 @@ export class AuthService {
     };
   }
 
+  /**
+   * Verify a user's email using a token.
+   * @param token - The email verification token.
+   * @returns A JWT authentication response.
+   */
   async verifyEmail(token: string): Promise<JwtAuthResponse> {
     try {
       const payload = await this.jwtService.verifyAsync<AuthPayload>(token);
@@ -90,6 +116,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * Send an email for resetting the user's password.
+   * @param emailDto - Data containing the user's email for password reset.
+   * @returns A message indicating the success of the email reset request.
+   */
   async sendResetPassword(emailDto: EmailDto): Promise<string> {
     const user = await this.prisma.user.findUnique({
       where: { email: emailDto.email },
@@ -116,9 +147,14 @@ export class AuthService {
 
     await this.mailService.sendUserPasswordReset(userDto, token);
 
-    return `Reset password email send to user with id ${userDto.id}`;
+    return `Reset password email sent to user with id ${userDto.id}`;
   }
 
+  /**
+   * Reset a user's password using a token.
+   * @param resetPasswordDto - Data containing the password reset token and new password.
+   * @returns A JWT authentication response.
+   */
   async resetPassword(
     resetPasswordDto: ResetPasswordDto,
   ): Promise<JwtAuthResponse> {

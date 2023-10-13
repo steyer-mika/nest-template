@@ -29,6 +29,12 @@ export class MailService {
     });
   }
 
+  /**
+   * Send an email for email verification.
+   * @param user - The user to send the email verification to.
+   * @param jwtToken - JWT token for email verification.
+   * @returns A promise with the result of sending the email.
+   */
   async sendUserEmailVerification(user: UserDto, jwtToken: string) {
     const userCredentials = extractUserCredentials(user);
 
@@ -47,6 +53,12 @@ export class MailService {
     );
   }
 
+  /**
+   * Send an email for resetting the user's password.
+   * @param user - The user to send the password reset email to.
+   * @param jwtToken - JWT token for password reset.
+   * @returns A promise with the result of sending the email.
+   */
   async sendUserPasswordReset(user: UserDto, jwtToken: string) {
     const userCredentials = extractUserCredentials(user);
 

@@ -19,10 +19,16 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
 
+  /**
+   * Create a new user.
+   * @param createUserDto - Data for creating a new user.
+   * @returns A promise that resolves to a UserDto.
+   */
   async create(createUserDto: CreateUserDto): Promise<UserDto> {
     try {
       const saltRounds = this.configService.getOrThrow<number>('auth.salt');
       const hash = await hashPassword(createUserDto.password, saltRounds);
+
       const user = await this.prisma.user.create({
         data: {
           ...createUserDto,
@@ -43,6 +49,11 @@ export class UserService {
     }
   }
 
+  /**
+   * Find a user by ID.
+   * @param id - The ID of the user to find.
+   * @returns A promise that resolves to a UserDto.
+   */
   async findOne(id: number): Promise<UserDto> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { id },
@@ -51,6 +62,12 @@ export class UserService {
     return plainToInstance(UserDto, user);
   }
 
+  /**
+   * Update a user's information.
+   * @param id - The ID of the user to update.
+   * @param updateUserDto - Data for updating the user.
+   * @returns A promise that resolves to a UserDto.
+   */
   async update(id: number, updateUserDto: UpdateUserDto): Promise<UserDto> {
     const user = await this.prisma.user.update({
       where: { id },
@@ -60,12 +77,23 @@ export class UserService {
     return plainToInstance(UserDto, user);
   }
 
+  /**
+   * Delete a user by ID.
+   * @param id - The ID of the user to delete.
+   * @returns A string indicating the success of the deletion.
+   */
   async delete(id: number): Promise<string> {
     const user = await this.prisma.user.delete({ where: { id } });
 
     return `User with id ${user.id} has been deleted successfully.`;
   }
 
+  /**
+   * Reset a user's password.
+   * @param id - The ID of the user to reset the password for.
+   * @param password - The new password.
+   * @returns A promise that resolves to a UserDto.
+   */
   async resetPassword(id: number, password: string): Promise<UserDto> {
     const saltRounds = this.configService.getOrThrow<number>('auth.salt');
     const hash = await hashPassword(password, saltRounds);
@@ -83,6 +111,11 @@ export class UserService {
     return plainToInstance(UserDto, user);
   }
 
+  /**
+   * Verify a user's email.
+   * @param id - The ID of the user to verify the email for.
+   * @returns A promise that resolves to a UserDto.
+   */
   async verifyEmail(id: number): Promise<UserDto> {
     const user = await this.prisma.user.update({
       where: { id },

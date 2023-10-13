@@ -14,6 +14,10 @@ export class HealthController {
     private readonly prismaHealthIndicator: PrismaHealthIndicator,
   ) {}
 
+  /**
+   * Perform health checks for the application.
+   * @returns The result of health checks.
+   */
   @Get()
   @Public()
   @HealthCheck()
