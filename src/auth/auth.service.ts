@@ -1,17 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
-import { type User } from '@prisma/client';
+import { plainToInstance } from 'class-transformer';
 import bcrypt from 'bcrypt';
 
+import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
+import { UserDto } from '@/api/user/dto/user.dto';
 import { MailService } from '@/services/mail/mail.service';
 import { PrismaService } from '@/services/prisma/prisma.service';
 import { UserService } from '@/api/user/user.service';
-import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
 
 import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
-import { type AuthPayload, type JwtAuthResponse } from './jwt/types';
 import { JwtTokenType } from './jwt/enums';
+import { type AuthPayload, type JwtAuthResponse } from './jwt/types';
 import { type ResetPasswordDto } from './dto/reset-password.dto';
 import { type EmailDto } from './dto/email.dto';
 
@@ -25,13 +26,15 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+  async validateUser(email: string, pass: string): Promise<UserDto | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
 
     if (user === null) return null;
 
-    const compared = await bcrypt.compare(pass, user.password);
-    return compared ? user : null;
+    const isSamePassword = await bcrypt.compare(pass, user.password);
+    return isSamePassword ? plainToInstance(UserDto, user) : null;
   }
 
   async register(createUserDto: CreateUserDto): Promise<JwtAuthResponse> {
@@ -40,7 +43,7 @@ export class AuthService {
     return this.login(registeredUser);
   }
 
-  async sendEmailVerification(user: User): Promise<string> {
+  async sendEmailVerification(user: UserDto): Promise<string> {
     const expiresIn = this.configService.getOrThrow<string>(
       'auth.jwt.confirmationExpiresIn',
     );
@@ -54,7 +57,7 @@ export class AuthService {
     return `Email verification send to user with id ${user.id}`;
   }
 
-  async login(user: User): Promise<JwtAuthResponse> {
+  async login(user: UserDto): Promise<JwtAuthResponse> {
     const accessPayload = tokenFactory(user, 'Access');
     const refreshPayload = tokenFactory(user, 'Refresh');
 
@@ -96,7 +99,9 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const resetPasswordPayload = tokenFactory(user, 'ResetPassword');
+    const userDto = plainToInstance(UserDto, user);
+
+    const resetPasswordPayload = tokenFactory(userDto, 'ResetPassword');
 
     const resetPasswordOptions: Partial<JwtSignOptions> = {
       expiresIn: this.configService.get<string>(
@@ -109,9 +114,9 @@ export class AuthService {
       resetPasswordOptions,
     );
 
-    await this.mailService.sendUserPasswordReset(user, token);
+    await this.mailService.sendUserPasswordReset(userDto, token);
 
-    return `Reset password email send to user with id ${user.id}`;
+    return `Reset password email send to user with id ${userDto.id}`;
   }
 
   async resetPassword(
@@ -130,6 +135,7 @@ export class AuthService {
         payload.sub,
         resetPasswordDto.password,
       );
+
       return this.login(user);
     } catch (error) {
       throw new UnauthorizedException();

@@ -4,7 +4,6 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { type User } from '@prisma/client';
 
 import {
   type AppAbility,
@@ -15,6 +14,7 @@ import {
   type PolicyHandler,
 } from '@/auth/decorators/polices.decorator';
 import { IS_PUBLIC_KEY } from '@/auth/decorators/public.decorator';
+import { type UserDto } from '@/api/user/dto/user.dto';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
@@ -38,7 +38,7 @@ export class PoliciesGuard implements CanActivate {
         context.getHandler(),
       ) || [];
 
-    const user: User = context.switchToHttp().getRequest().user;
+    const user: UserDto = context.switchToHttp().getRequest().user;
 
     const ability = this.caslAbilityFactory.createForUser(user);
 

@@ -1,9 +1,8 @@
 import { Controller, Post, UseGuards, Get, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { CreateUserDto } from '@/api/user/dto/create-user.dto';
-import { User } from '@prisma/client';
-
+import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
+import { type UserDto } from '@/api/user/dto/user.dto';
 import { Public } from '@/auth/decorators/public.decorator';
 import { GetUser } from '@/core/decorators/param/user.decorator';
 import { TokenDto } from '@/auth/dto/token.dto';
@@ -12,8 +11,8 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { type JwtAuthResponse } from './jwt/types';
-import { EmailDto } from './dto/email.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
+import { type EmailDto } from './dto/email.dto';
+import { type ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Authentication')
 @ApiBearerAuth()
@@ -22,7 +21,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('me')
-  async me(@GetUser() user: User): Promise<User> {
+  async me(@GetUser() user: UserDto): Promise<UserDto> {
     return user;
   }
 
@@ -35,19 +34,19 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@GetUser() user: User): Promise<JwtAuthResponse> {
+  async login(@GetUser() user: UserDto): Promise<JwtAuthResponse> {
     return this.authService.login(user);
   }
 
   @Public()
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
-  async refresh(@GetUser() user: User): Promise<JwtAuthResponse> {
+  async refresh(@GetUser() user: UserDto): Promise<JwtAuthResponse> {
     return this.authService.login(user);
   }
 
   @Get('email/email-verification')
-  async sendEmailVerification(@GetUser() user: User): Promise<string> {
+  async sendEmailVerification(@GetUser() user: UserDto): Promise<string> {
     return this.authService.sendEmailVerification(user);
   }
 

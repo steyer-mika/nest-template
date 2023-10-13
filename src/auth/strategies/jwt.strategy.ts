@@ -2,11 +2,12 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { type User } from '@prisma/client';
+import { plainToInstance } from 'class-transformer';
 
 import { type LoginTokenPayload } from '@/auth/jwt/types';
 import { JwtTokenType } from '@/auth/jwt/enums';
 import { PrismaService } from '@/services/prisma/prisma.service';
+import { UserDto } from '@/api/user/dto/user.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -21,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: LoginTokenPayload): Promise<User> {
+  async validate(payload: LoginTokenPayload): Promise<UserDto> {
     if (payload.type !== JwtTokenType.Access) throw new UnauthorizedException();
 
     const user = await this.prisma.user.findUnique({
@@ -29,6 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
 
     if (!user || user.active !== true) throw new UnauthorizedException();
-    return user;
+
+    return plainToInstance(UserDto, user);
   }
 }

@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { RequestData } from 'node-mailjet/declarations/request/Request';
 import { type LibraryResponse, Client } from 'node-mailjet';
-import { type User } from '@prisma/client';
 
+import { type UserDto } from '@/api/user/dto/user.dto';
 import { extractUserCredentials } from '@/utility/user/extract-user-credentials';
 import endpoints from '@/config/endpoints';
 import mailjetConfig from '@/config/mailjet';
@@ -29,7 +29,7 @@ export class MailService {
     });
   }
 
-  async sendUserEmailVerification(user: User, jwtToken: string) {
+  async sendUserEmailVerification(user: UserDto, jwtToken: string) {
     const userCredentials = extractUserCredentials(user);
 
     const frontendUrl = this.configService.get<string>('frontend.url');
@@ -47,7 +47,7 @@ export class MailService {
     );
   }
 
-  async sendUserPasswordReset(user: User, jwtToken: string) {
+  async sendUserPasswordReset(user: UserDto, jwtToken: string) {
     const userCredentials = extractUserCredentials(user);
 
     const frontendUrl = this.configService.get<string>('frontend.url');

@@ -7,6 +7,8 @@ import {
 } from '@casl/prisma';
 import { type User, Role } from '@prisma/client';
 
+import { type UserDto } from '@/api/user/dto/user.dto';
+
 import { Action } from './actions';
 
 export type AppSubjects = Subjects<{
@@ -20,7 +22,7 @@ export type AppAbility = PureAbility<
 
 @Injectable()
 export class CaslAbilityFactory {
-  createForUser(user: User) {
+  createForUser(user: UserDto) {
     const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
     if (user.role === Role.Admin) {
