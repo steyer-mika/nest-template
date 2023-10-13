@@ -20,4 +20,8 @@ export class CreateUserDto implements Partial<User> {
   @IsOptional()
   @IsString()
   readonly lastName?: string | undefined;
+
+  @IsOptional()
+  @IsString()
+  readonly locale?: string | undefined;
 }

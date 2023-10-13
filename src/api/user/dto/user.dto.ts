@@ -18,6 +18,9 @@ export class UserDto implements User {
   readonly username: string;
 
   @Expose()
+  readonly locale: string;
+
+  @Expose()
   readonly firstName: string | null;
 
   @Expose()

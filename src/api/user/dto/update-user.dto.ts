@@ -6,4 +6,5 @@ export class UpdateUserDto extends PickType(CreateUserDto, [
   'username',
   'firstName',
   'lastName',
+  'locale',
 ]) {}

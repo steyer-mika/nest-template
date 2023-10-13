@@ -10,6 +10,7 @@ CREATE TABLE "User" (
     "role" "Role" NOT NULL,
     "firstName" TEXT,
     "lastName" TEXT,
+    "locale" TEXT NOT NULL DEFAULT 'en',
     "active" BOOLEAN NOT NULL,
     "emailVerified" BOOLEAN NOT NULL,
     "deletedAt" TIMESTAMP(3),
@@ -21,3 +22,6 @@ CREATE TABLE "User" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE INDEX "User_email_idx" ON "User"("email");
