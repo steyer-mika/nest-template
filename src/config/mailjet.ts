@@ -1,8 +1,8 @@
 import { TranslationService } from '@/services/translation/translation.service';
 
 export default {
-  from: 'noreply@motion-impact.com',
-  name: 'Motion Impact',
+  from: 'noreply@nest-template.com',
+  name: 'Nest Template',
 
   templates: {
     resetPassword: {
