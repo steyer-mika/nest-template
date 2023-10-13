@@ -1,13 +1,13 @@
 # <ins>Nest Template</ins>
 
----
+Nest Template is a comprehensive application development setup that covers various aspects, from environment setup to security, documentation, and more. This README will guide you through the setup and various features of the project.
 
 ## Setup for Development
 
 ### Requirements
 
-- Node (~ v20.8.0)
-- NPM (~ v10.2.0)
+- Node (v20.8.0 or higher)
+- NPM (v10.2.0 or higher)
 - Docker
 
 ### VS Code Extensions
@@ -15,43 +15,43 @@
 - Prettier
 - EsLint
 
-(_Hint: install the extensions under `.vscode/extensions.json`_)
+(_Hint: Install the extensions under `.vscode/extensions.json`_)
 
-### Step for Step Setup
+### Step-by-Step Setup
 
-1. clone Nest Template in empty folder
-2. configure `.env`
-   - replace `APP_NAME` with project name
-   - generate `JWT_SECRET` using `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
-   - adjust `DATABASE_URL`
-   - set `FRONTEND_URL`
-   - set MailJet Config
-3. configure `.package.json` (name, version, ...)
-4. adjust `/client/index.html` (name)
-5. replace `/client/favicon.ico`
-6. add mail templates
-7. install packages `npm install`
-8. start database `docker-compose up`
-9. sync database `npx prisma migrate deploy`
-10. seed database `npx prisma db seed`
-11. run `npm run start:dev`
+1. Clone Nest Template into an empty folder.
+2. Configure `.env`:
+   - Replace `APP_NAME` with your project name.
+   - Generate a `JWT_SECRET` using `node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"`
+   - Adjust `DATABASE_URL`.
+   - Set `FRONTEND_URL`.
+   - Configure MailJet settings.
+3. Update `package.json` (name, version, etc.).
+4. Modify `/client/index.html` (name).
+5. Replace `/client/favicon.ico`.
+6. Add mail templates.
+7. Install packages with `npm install`.
+8. Start the database with `docker-compose up`.
+9. Synchronize the database with `npx prisma migrate deploy`.
+10. Seed the database with `npx prisma db seed`.
+11. Run the development server with `npm run start:dev`.
 
-Optional: 12. Open official NestJS Documentation `https://docs.nestjs.com/`
+Optional: 12. Open the official NestJS Documentation at `https://docs.nestjs.com/`.
 
 ---
 
 ## Docker
 
-You could use local PostgreSQL Database too.
+You can also use a local PostgreSQL Database.
 
-1. Configure `.env` with `.env.development`
-2. Start docker with `docker-compose up`
+1. Configure `.env` with `.env.development`.
+2. Start Docker with `docker-compose up`.
 
 ---
 
 ## Prisma Studio
 
-Open [Prisma Studio](https://www.prisma.io/studio) with `npx prisma studio` on localhost:5555
+Open [Prisma Studio](https://www.prisma.io/studio) with `npx prisma studio` on localhost:5555.
 
 ---
 
@@ -59,44 +59,43 @@ Open [Prisma Studio](https://www.prisma.io/studio) with `npx prisma studio` on l
 
 ### Security Endpoints
 
-[JWT](https://docs.nestjs.com/security/authentication)
+Learn more about [JWT](https://docs.nestjs.com/security/authentication).
 
-Every Endpoint is secured by default. To disable this behavior you can use the `@Public` decorator on the controller.
+Every endpoint is secured by default. To disable this behavior, you can use the `@Public` decorator on the controller.
 
-To access the secured endpoints you need a `Authorization Bearer Token` in the request headers.
+To access the secured endpoints, you need an `Authorization Bearer Token` in the request headers.
 
-On `auth/login` you can post your `email` and `password` in return you get **accessToken** and **refreshToken**.
+Use `/auth/login` to post your `email` and `password`, and in return, you will get an **accessToken** and **refreshToken**.
 
-Access Token is the Authorization Bearer Token
+The Access Token serves as the Authorization Bearer Token.
 
-And with the Refresh Token you can refresh the Access Token on `auth/refresh` with Method POST and Body `refreshToken`
+To refresh the Access Token, use the Refresh Token on `/auth/refresh` with a POST request and body containing the `refreshToken`.
 
 ### Role Authority
 
-[CASL](https://casl.js.org/v6/en/)
+Explore [CASL](https://casl.js.org/v6/en/).
 
-In CASL there every Schema is an **Subject**.
-Every Subject has multiple **Actions** (default CURD Methods and Manage that represents all Actions).
+In CASL, every schema is a **Subject**. Each Subject has multiple **Actions** (default CRUD methods and Manage, which represents all actions).
 
-**A user gets access to various actions on a subject based on there role.**
+Users are granted access to various actions on a subject based on their role.
 
 ### Verify Email
 
-After a user has registered or the endpoint `/auth/email/email-verification` has been called, an e-mail to verify the e-mail address is sent via an smtp server.
+After a user registers or the endpoint `/auth/email/email-verification` is called, an email is sent via an SMTP server to verify the user's email address.
 
-Email template can be edited under `src/mail/templates/*.hbs` and the frontend endpoints can be configured in `src/config/endpoints.ts`.
+You can edit the email template under `src/mail/templates/*.hbs`, and configure frontend endpoints in `src/config/endpoints.ts`.
 
-To verify the users email call `/auth/verify-email`.
+To verify the user's email, call `/auth/verify-email`.
 
-**Note: All endpoints that are not GET requests cannot be called as long as the email is not verified**
+**Note: All endpoints that are not GET requests cannot be called until the email is verified.**
 
 ### Reset Password
 
-f a user forgets his password, he can send himself an email to reset his password. The endpoint is on `/auth/email/reset-password`.
+If a user forgets their password, they can send themselves an email to reset it. The endpoint is at `/auth/email/reset-password`.
 
-Reset password template can be edited under `src/mail/templates/*.hbs` and the frontend endpoints can be configured in `src/config/endpoints.ts`.
+You can edit the reset password template under `src/mail/templates/*.hbs`, and configure frontend endpoints in `src/config/endpoints.ts`.
 
-To reset the password, the token and the new password must be sent to the endpoint `/auth/reset-password`.
+To reset the password, send the token and the new password to the endpoint `/auth/reset-password`.
 
 ---
 
@@ -104,65 +103,58 @@ To reset the password, the token and the new password must be sent to the endpoi
 
 ### Compression
 
-[Compression](https://docs.nestjs.com/techniques/compression) greatly decrease the size of the response body, thereby increasing the speed of a web app.
+Learn about [Compression](https://docs.nestjs.com/techniques/compression), which greatly reduces the size of the response body, increasing the speed of a web app.
 
 ### Helmet
 
-[Helmet](https://docs.nestjs.com/security/helmet) helps to protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Generally, Helmet is just a collection of smaller middleware functions that set security-related HTTP headers.
+Learn about [Helmet](https://docs.nestjs.com/security/helmet), which helps protect your app from well-known web vulnerabilities by setting appropriate HTTP headers. Helmet is a collection of smaller middleware functions that set security-related HTTP headers.
 
-### Cross-origin resource sharing
+### Cross-origin Resource Sharing
 
-[Cors](https://docs.nestjs.com/security/cors) is a mechanism that allows resources to be requested from another domain.
-**By default only the Frontend Url in .env is able to access backend**
+Learn about [CORS](https://docs.nestjs.com/security/cors), a mechanism that allows resources to be requested from another domain. By default, only the Frontend URL in `.env` can access the backend.
 
 ### Serve Static
 
-[Static Serve](https://docs.nestjs.com/recipes/serve-static)
-Serves all files in `client`.
+Learn about serving static files with [Static Serve](https://docs.nestjs.com/recipes/serve-static). This serves all files in the `client` folder.
 
 ### Seeds
 
-In prisma folder you can write your own seeds with `@faker-js/faker`.
+In the Prisma folder, you can write your own seeds with `@faker-js/faker`.
 
-You can seed with `npx prisma db seed`
+Seed the database with `npx prisma db seed`.
 
 ### Logger
 
-[Custom Logger](https://docs.nestjs.com/techniques/logger) Service with [winston](https://github.com/gremo/nest-winston)
-Will print to `console` and to files in `logs/`.
+Learn about the custom logger service with [winston](https://github.com/gremo/nest-winston). It prints to the console and to files in `logs`.
 
-In develop it will print all logs to Log Level `Debug` and in production to Log Level `Info`.
+In development, it logs all messages with log level `Debug`, and in production, it uses log level `Info`.
 
-All **HTTP Requests** will be logged with **Custom Middleware**.
+All HTTP requests are logged with a custom middleware.
 
-**BUG: When Module, Service or Controller is injected wrong, NestJS won`t log it due to the custom Logger Service.**
+**BUG: When a Module, Service, or Controller is injected incorrectly, NestJS won't log it due to the custom Logger Service.**
 
 ### Health-checks
 
-[Health checks](https://docs.nestjs.com/recipes/terminus) are created to ensure that external services (like database) are available and can be accessed via `/health`.
+[Health checks](https://docs.nestjs.com/recipes/terminus) are created to ensure that external services (like the database) are available and can be accessed via `/health`.
 
 ### Rate Limiting
 
 Global [Throttler](https://docs.nestjs.com/security/rate-limiting) can be configured in `.env`:
 
-- THROTTLER_TTL -> the number of seconds that each request will last in storage
-- THROTTLER_LIMIT -> the maximum number of requests within the TTL limit
+- THROTTLER_TTL: the number of seconds that each request will last in storage.
+- THROTTLER_LIMIT: the maximum number of requests within the TTL limit.
 
 ### Validation
 
-[Validation](https://docs.nestjs.com/techniques/validation) via DTO
-
-- [Available Rules](https://github.com/typestack/class-validator#validation-decorators)
-- [Available Transforms](https://github.com/typestack/class-transformer)
+[Validation](https://docs.nestjs.com/techniques/validation) via DTO. Check available rules and transforms [here](https://github.com/typestack/class-validator#validation-decorators).
 
 ### Prisma
 
-[Prisma](https://www.prisma.io/)
-[Nest Prisma](https://docs.nestjs.com/recipes/prisma)
+Learn about [Prisma](https://www.prisma.io/) and [Nest Prisma](https://docs.nestjs.com/recipes/prisma).
 
 #### Migrations
 
-[Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate) database with `npx prisma migrate dev --name ${__name__}`. Replace migration name `${__name__}`
+[Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate) the database with `npx prisma migrate dev --name ${__name__}`. Replace `${__name__}` with the migration name.
 
 #### Transactions
 
@@ -170,7 +162,7 @@ Use [Transactions](https://www.prisma.io/docs/concepts/components/prisma-client/
 
 ### Environment Variables
 
-[Configuration](https://docs.nestjs.com/techniques/configuration)
+Learn about [Configuration](https://docs.nestjs.com/techniques/configuration).
 
 ---
 
@@ -178,19 +170,15 @@ Use [Transactions](https://www.prisma.io/docs/concepts/components/prisma-client/
 
 ### Full Documentation
 
-Automatic Project Documentation with [Compodoc](https://docs.nestjs.com/recipes/documentation)
+Automatic Project Documentation with [Compodoc](https://docs.nestjs.com/recipes/documentation).
 
-With `npm run doc:generate` you can generate the documentation for the current codebase.
-
-And with `doc:serve` you can visit it on `http://localhost:4201`.
+Generate documentation for the current codebase with `npm run doc:generate`. Access it at `http://localhost:4201` with `doc:serve`.
 
 ### API Documentation
 
-Automatic API Documentation with [Swagger](https://docs.nestjs.com/openapi/introduction)
+Automatic API Documentation with [Swagger](https://docs.nestjs.com/openapi/introduction).
 
-You can visit the API documentation under `/api` (Authorization is still required for secured endpoints).
-
-**[CLI Plugin](https://docs.nestjs.com/openapi/cli-plugin) will automatically add decorators for the documentation.**
+Access the API documentation at `/api` (authorization is still required for secured endpoints).
 
 ---
 
