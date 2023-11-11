@@ -15,11 +15,11 @@ export class CreateUserDto implements Partial<User> {
 
   @IsOptional()
   @IsString()
-  readonly firstName?: string | undefined;
+  readonly firstname?: string | undefined;
 
   @IsOptional()
   @IsString()
-  readonly lastName?: string | undefined;
+  readonly lastname?: string | undefined;
 
   @IsOptional()
   @IsString()

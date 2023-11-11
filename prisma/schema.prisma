@@ -23,8 +23,8 @@ model User {
   password String
   role     Role
 
-  firstName String?
-  lastName  String?
+  firstname String?
+  lastname  String?
 
   locale String @default("en")
 

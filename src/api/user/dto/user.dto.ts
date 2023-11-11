@@ -21,10 +21,10 @@ export class UserDto implements User {
   readonly locale: string;
 
   @Expose()
-  readonly firstName: string | null;
+  readonly firstname: string | null;
 
   @Expose()
-  readonly lastName: string | null;
+  readonly lastname: string | null;
 
   @Expose()
   readonly active: boolean;

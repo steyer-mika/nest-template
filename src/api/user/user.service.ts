@@ -9,8 +9,8 @@ import { PrismaService } from '@/services/prisma/prisma.service';
 import { hashPassword } from '@/auth/hash';
 
 import { UserDto } from './dto/user.dto';
-import { type CreateUserDto } from './dto/create-user.dto';
-import { type UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
