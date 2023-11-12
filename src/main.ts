@@ -34,7 +34,7 @@ async function bootstrap() {
 
   // https://docs.nestjs.com/security/cors //
   app.enableCors({
-    origin: config.getOrThrow<string>('frontend'),
+    origin: config.getOrThrow<string>('frontend.url'),
   });
 
   // https://docs.nestjs.com/techniques/validation //
