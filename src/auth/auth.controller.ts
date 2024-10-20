@@ -1,18 +1,18 @@
-import { Controller, Post, UseGuards, Get, Body } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
 import { type UserDto } from '@/api/user/dto/user.dto';
 import { Public } from '@/auth/decorators/public.decorator';
-import { GetUser } from '@/core/decorators/param/user.decorator';
 import { TokenDto } from '@/auth/dto/token.dto';
+import { AuthUser } from '@/core/decorators/param/user.decorator';
 
 import { AuthService } from './auth.service';
+import { type EmailDto } from './dto/email.dto';
+import { type ResetPasswordDto } from './dto/reset-password.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { type JwtAuthResponse } from './jwt/types';
-import { type EmailDto } from './dto/email.dto';
-import { type ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Authentication')
 @ApiBearerAuth()
@@ -26,7 +26,7 @@ export class AuthController {
    * @returns A promise that resolves to the user's information.
    */
   @Get('me')
-  async me(@GetUser() user: UserDto): Promise<UserDto> {
+  async me(@AuthUser() user: UserDto): Promise<UserDto> {
     return user;
   }
 
@@ -49,7 +49,7 @@ export class AuthController {
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@GetUser() user: UserDto): Promise<JwtAuthResponse> {
+  async login(@AuthUser() user: UserDto): Promise<JwtAuthResponse> {
     return this.authService.login(user);
   }
 
@@ -61,7 +61,7 @@ export class AuthController {
   @Public()
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
-  async refresh(@GetUser() user: UserDto): Promise<JwtAuthResponse> {
+  async refresh(@AuthUser() user: UserDto): Promise<JwtAuthResponse> {
     return this.authService.login(user);
   }
 
@@ -71,7 +71,7 @@ export class AuthController {
    * @returns A string indicating the success of the email verification request.
    */
   @Get('email/email-verification')
-  async sendEmailVerification(@GetUser() user: UserDto): Promise<string> {
+  async sendEmailVerification(@AuthUser() user: UserDto): Promise<string> {
     return this.authService.sendEmailVerification(user);
   }
 

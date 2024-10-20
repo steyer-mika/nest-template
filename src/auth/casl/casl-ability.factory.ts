@@ -1,22 +1,29 @@
-import { Injectable } from '@nestjs/common';
 import { AbilityBuilder, type PureAbility } from '@casl/ability';
 import {
-  type Subjects,
   createPrismaAbility,
   type PrismaQuery,
+  type Subjects,
 } from '@casl/prisma';
-import { type User, Role } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { type User } from '@prisma/client';
 
 import { type UserDto } from '@/api/user/dto/user.dto';
 
-import { Action } from './actions';
+export const AppAction = {
+  create: 'create',
+  read: 'read',
+  update: 'update',
+  delete: 'delete',
+} as const;
+
+export type AppAction = (typeof AppAction)[keyof typeof AppAction];
 
 export type AppSubjects = Subjects<{
   User: User;
 }>;
 
 export type AppAbility = PureAbility<
-  [string, AppSubjects | 'all'],
+  [AppAction | 'manage', AppSubjects | 'all'],
   PrismaQuery
 >;
 
@@ -25,10 +32,12 @@ export class CaslAbilityFactory {
   createForUser(user: UserDto) {
     const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
-    if (user.role === Role.Admin) {
-      can(Action.Manage, 'all');
-    } else if (user.role === Role.User) {
-      can(Action.Read, 'User');
+    if (user.role === 'Admin') {
+      can('manage', 'all');
+    } else if (user.role === 'User') {
+      can('read', 'User'); // Allow the user to read their own account.
+      can('update', 'User'); // Allow the user to update their own account.
+      can('delete', 'User'); // Allow the user to delete their own account.
     }
 
     return build();

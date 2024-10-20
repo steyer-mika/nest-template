@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
@@ -45,7 +45,7 @@ export class UserService {
         if (error.code === 'P2002') throw new DuplicateEmailException();
       }
 
-      throw new InternalServerErrorException();
+      throw error;
     }
   }
 
@@ -97,11 +97,20 @@ export class UserService {
   async resetPassword(id: number, password: string): Promise<UserDto> {
     const saltRounds = this.configService.getOrThrow<number>('auth.salt');
     const hash = await hashPassword(password, saltRounds);
-    const user = await this.prisma.user.findUniqueOrThrow({ where: { id } });
+
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (
+      user === null ||
+      user.isActive === false ||
+      user.isEmailVerified === false
+    ) {
+      throw new UnauthorizedException();
+    }
 
     if (user.password === hash) throw new PasswordReusedException();
 
-    this.prisma.user.update({
+    await this.prisma.user.update({
       where: { id },
       data: {
         password: hash,
@@ -123,5 +132,18 @@ export class UserService {
     });
 
     return plainToInstance(UserDto, user);
+  }
+
+  /**
+   * Check if a user can perform an action.
+   * @param action - The action the user is attempting to perform.
+   * @param subjectId - The ID of the subject of the action.
+   * @param authUser - The authenticated user.
+   * @returns A boolean indicating if the user can perform the action.
+   */
+  $can(subjectId: number, authUser: UserDto): boolean {
+    if (authUser.role === 'Admin') return true;
+
+    return authUser.id === subjectId;
   }
 }

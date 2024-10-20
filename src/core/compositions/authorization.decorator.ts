@@ -1,26 +1,20 @@
 import { applyDecorators } from '@nestjs/common';
 
-import { CheckPolicies } from '@/auth/decorators/polices.decorator';
 import {
   type AppAbility,
+  type AppAction,
   type AppSubjects,
 } from '@/auth/casl/casl-ability.factory';
-import { Action } from '@/auth/casl/actions';
-
-type ActionLiteral = keyof typeof Action;
-
-type ActionType<TType> = TType extends Action.Manage ? never : TType;
+import { CheckPolicies } from '@/auth/decorators/polices.decorator';
 
 export const Authorization = (
-  action: ActionType<ActionLiteral>,
+  action: AppAction,
   ...subjects: AppSubjects[]
 ) => {
   return applyDecorators(
     CheckPolicies((ability: AppAbility) =>
       Boolean(
-        subjects.find(
-          (subject) => ability.can(Action[action], subject) === true,
-        ),
+        subjects.find((subject) => ability.can(action, subject) === true),
       ),
     ),
   );
