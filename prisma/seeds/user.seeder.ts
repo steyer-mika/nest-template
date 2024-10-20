@@ -1,6 +1,6 @@
 import { type Prisma, type PrismaClient } from '@prisma/client';
-import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import * as dotenv from 'dotenv';
 
 export default async (prisma: PrismaClient, quantity: number) => {
   dotenv.config();
@@ -13,8 +13,8 @@ export default async (prisma: PrismaClient, quantity: number) => {
     role: 'Admin',
     username: 'Admin',
     password: await bcrypt.hash('AdminAdmin1!', salt),
-    emailVerified: true,
-    active: true,
+    isEmailVerified: true,
+    isActive: true,
   });
 
   for (let count = 0; count < quantity; count++) {
@@ -23,8 +23,8 @@ export default async (prisma: PrismaClient, quantity: number) => {
       username: `User ${count + 1}`,
       role: 'User',
       password: await bcrypt.hash('TestTest1!', salt),
-      emailVerified: true,
-      active: true,
+      isEmailVerified: true,
+      isActive: true,
     });
   }
 

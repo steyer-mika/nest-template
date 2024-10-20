@@ -1,13 +1,13 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
 import { plainToInstance } from 'class-transformer';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { type LoginTokenPayload } from '@/auth/jwt/types';
-import { JwtTokenType } from '@/auth/jwt/enums';
-import { PrismaService } from '@/services/prisma/prisma.service';
 import { UserDto } from '@/api/user/dto/user.dto';
+import { JwtTokenType } from '@/auth/jwt/enums';
+import { type LoginTokenPayload } from '@/auth/jwt/types';
+import { PrismaService } from '@/services/prisma/prisma.service';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
@@ -33,7 +33,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       },
     });
 
-    if (!user || user.active !== true) throw new UnauthorizedException();
+    if (!user || user.isActive !== true) throw new UnauthorizedException();
 
     return plainToInstance(UserDto, user);
   }

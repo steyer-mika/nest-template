@@ -1,16 +1,16 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
+import { Prisma } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 
-import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
-import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.exception';
-import { PrismaService } from '@/services/prisma/prisma.service';
 import { hashPassword } from '@/auth/hash';
+import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.exception';
+import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
+import { PrismaService } from '@/services/prisma/prisma.service';
 
+import { type CreateUserDto } from './dto/create-user.dto';
+import { type UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -33,8 +33,8 @@ export class UserService {
         data: {
           ...createUserDto,
           role: 'User',
-          active: true,
-          emailVerified: false,
+          isActive: true,
+          isEmailVerified: false,
           password: hash,
         },
       });
@@ -119,7 +119,7 @@ export class UserService {
   async verifyEmail(id: number): Promise<UserDto> {
     const user = await this.prisma.user.update({
       where: { id },
-      data: { emailVerified: true },
+      data: { isEmailVerified: true },
     });
 
     return plainToInstance(UserDto, user);

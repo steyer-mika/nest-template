@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
-import { plainToInstance } from 'class-transformer';
 import bcrypt from 'bcrypt';
+import { plainToInstance } from 'class-transformer';
 
 import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
 import { UserDto } from '@/api/user/dto/user.dto';
@@ -10,11 +10,11 @@ import { UserService } from '@/api/user/user.service';
 import { MailService } from '@/services/mail/mail.service';
 import { PrismaService } from '@/services/prisma/prisma.service';
 
-import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
+import { type EmailDto } from './dto/email.dto';
+import { type ResetPasswordDto } from './dto/reset-password.dto';
 import { JwtTokenType } from './jwt/enums';
 import { type AuthPayload, type JwtAuthResponse } from './jwt/types';
-import { type ResetPasswordDto } from './dto/reset-password.dto';
-import { type EmailDto } from './dto/email.dto';
+import { jwtOptionExpiresInFactory, tokenFactory } from './jwt/utility';
 
 @Injectable()
 export class AuthService {
@@ -126,7 +126,7 @@ export class AuthService {
       where: { email: emailDto.email },
     });
 
-    if (!user || !user.active) {
+    if (!user || !user.isActive) {
       throw new UnauthorizedException();
     }
 

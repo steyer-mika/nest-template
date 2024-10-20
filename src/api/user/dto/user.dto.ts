@@ -27,10 +27,10 @@ export class UserDto implements User {
   readonly lastname: string | null;
 
   @Expose()
-  readonly active: boolean;
+  readonly isActive: boolean;
 
   @Expose()
-  readonly emailVerified: boolean;
+  readonly isEmailVerified: boolean;
 
   readonly createdAt: Date;
   readonly updatedAt: Date;
