@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { RequestData } from 'node-mailjet/declarations/request/Request';
 import { type LibraryResponse, Client } from 'node-mailjet';
+import type { RequestData } from 'node-mailjet/declarations/request/Request';
 
 import { type UserDto } from '@/api/user/dto/user.dto';
-import { extractUserCredentials } from '@/utility/user/extract-user-credentials';
+import { extractUserCredentials } from '@/api/user/utility/extract-user-credentials';
 import endpoints from '@/config/endpoints';
 import mailjetConfig from '@/config/mailjet';
 
