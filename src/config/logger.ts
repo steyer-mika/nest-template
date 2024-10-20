@@ -38,7 +38,9 @@ export class LoggerConfig {
       transports: [
         new transports.Console({
           format: format.combine(
-            format.timestamp(),
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss',
+            }),
             format.ms(),
             utilities.format.nestLike(environment.app.name, {
               colors: true,
@@ -53,7 +55,9 @@ export class LoggerConfig {
           level,
           format: format.combine(
             format.ms(),
-            format.timestamp(),
+            format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss',
+            }),
             utilities.format.nestLike(environment.app.name, {
               colors: false,
               prettyPrint: true,
