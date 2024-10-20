@@ -1,10 +1,9 @@
-import { PickType } from '@nestjs/swagger';
+import { OmitType } from '@nestjs/swagger';
 
+import { IsBoolean } from 'class-validator';
 import { CreateUserDto } from './create-user.dto';
 
-export class UpdateUserDto extends PickType(CreateUserDto, [
-  'username',
-  'firstname',
-  'lastname',
-  'locale',
-]) {}
+export class UpdateUserDto extends OmitType(CreateUserDto, ['password']) {
+  @IsBoolean()
+  readonly isActive: boolean;
+}
