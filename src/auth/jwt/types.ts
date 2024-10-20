@@ -14,8 +14,11 @@ export type AuthPayload = {
   type: JwtTokenType;
 };
 
-export type LoginTokenPayload = JwtToken & AuthPayload;
+export type TokenPayload = JwtToken & AuthPayload;
 
+/**
+ * The response the user receives when they authenticate with JWT.
+ */
 export type JwtAuthResponse = {
   accessToken: string;
   refreshToken: string;

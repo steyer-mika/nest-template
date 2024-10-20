@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
+import { type UserDto } from '@/api/user/dto/user.dto';
 import {
   type AppAbility,
   CaslAbilityFactory,
@@ -14,7 +15,6 @@ import {
   type PolicyHandler,
 } from '@/auth/decorators/polices.decorator';
 import { IS_PUBLIC_KEY } from '@/auth/decorators/public.decorator';
-import { type UserDto } from '@/api/user/dto/user.dto';
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
@@ -28,6 +28,7 @@ export class PoliciesGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+
     if (isPublic) {
       return true;
     }
@@ -51,6 +52,7 @@ export class PoliciesGuard implements CanActivate {
     if (typeof handler === 'function') {
       return handler(ability);
     }
+
     return handler.handle(ability);
   }
 }

@@ -5,8 +5,7 @@ import { plainToInstance } from 'class-transformer';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UserDto } from '@/api/user/dto/user.dto';
-import { JwtTokenType } from '@/auth/jwt/enums';
-import { type LoginTokenPayload } from '@/auth/jwt/types';
+import { type TokenPayload } from '@/auth/jwt/types';
 import { PrismaService } from '@/services/prisma/prisma.service';
 
 @Injectable()
@@ -22,8 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: LoginTokenPayload): Promise<UserDto> {
-    if (payload.type !== JwtTokenType.Access) throw new UnauthorizedException();
+  async validate(payload: TokenPayload): Promise<UserDto> {
+    if (payload.type !== 'Access') throw new UnauthorizedException();
 
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },

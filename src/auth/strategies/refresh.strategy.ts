@@ -5,8 +5,7 @@ import { plainToInstance } from 'class-transformer';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UserDto } from '@/api/user/dto/user.dto';
-import { JwtTokenType } from '@/auth/jwt/enums';
-import { type LoginTokenPayload } from '@/auth/jwt/types';
+import { type TokenPayload } from '@/auth/jwt/types';
 import { PrismaService } from '@/services/prisma/prisma.service';
 
 @Injectable()
@@ -22,8 +21,8 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     });
   }
 
-  async validate(payload: LoginTokenPayload): Promise<UserDto> {
-    if (payload.type !== JwtTokenType.Refresh) {
+  async validate(payload: TokenPayload): Promise<UserDto> {
+    if (payload.type !== 'Refresh') {
       throw new UnauthorizedException();
     }
 
