@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { type ConfigService } from '@nestjs/config';
 import { type LibraryResponse, Client } from 'node-mailjet';
 import type { RequestData } from 'node-mailjet/declarations/request/Request';
 

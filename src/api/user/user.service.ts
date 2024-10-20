@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { type ConfigService } from '@nestjs/config';
 import { Prisma } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 
 import { hashPassword } from '@/auth/hash';
 import { DuplicateEmailException } from '@/core/exceptions/duplicate-email.exception';
 import { PasswordReusedException } from '@/core/exceptions/password-reused.exception';
-import { PrismaService } from '@/services/prisma/prisma.service';
+import { type PrismaService } from '@/services/prisma/prisma.service';
 
 import { type CreateUserDto } from './dto/create-user.dto';
 import { type UpdateUserDto } from './dto/update-user.dto';

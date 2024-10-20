@@ -4,10 +4,10 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
 import { type UserDto } from '@/api/user/dto/user.dto';
 import { Public } from '@/auth/decorators/public.decorator';
-import { TokenDto } from '@/auth/dto/token.dto';
+import { type TokenDto } from '@/auth/dto/token.dto';
 import { AuthUser } from '@/core/decorators/param/user.decorator';
 
-import { AuthService } from './auth.service';
+import { type AuthService } from './auth.service';
 import { type EmailDto } from './dto/email.dto';
 import { type ResetPasswordDto } from './dto/reset-password.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';

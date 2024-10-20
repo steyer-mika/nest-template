@@ -1,4 +1,4 @@
-import { LocaleName, Translation, findDeep, locales } from './i18n';
+import { type LocaleName, type Translation, findDeep, locales } from './i18n';
 
 export class TranslationService {
   public static locale: LocaleName = 'en';

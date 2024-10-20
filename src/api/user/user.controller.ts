@@ -17,7 +17,7 @@ import { AuthUser } from '@/core/decorators/param/user.decorator';
 import { type CreateUserDto } from './dto/create-user.dto';
 import { type UpdateUserDto } from './dto/update-user.dto';
 import { type UserDto } from './dto/user.dto';
-import { UserService } from './user.service';
+import { type UserService } from './user.service';
 
 @ApiBearerAuth()
 @ApiTags('Users')
