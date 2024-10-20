@@ -1,5 +1,5 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
 import { type User } from '@prisma/client';
+import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 import { IsPassword } from '@/core/decorators/validation/isPassword.decorator';
 
@@ -15,13 +15,16 @@ export class CreateUserDto implements Partial<User> {
 
   @IsOptional()
   @IsString()
+  @MinLength(1)
   readonly firstname?: string | undefined;
 
   @IsOptional()
   @IsString()
+  @MinLength(1)
   readonly lastname?: string | undefined;
 
   @IsOptional()
   @IsString()
+  @MinLength(1)
   readonly locale?: string | undefined;
 }
