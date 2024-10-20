@@ -26,5 +26,5 @@
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.tsdk": "node_modules\\typescript\\lib",
 
-  "cSpell.words": ["casl", "prisma", "tsbuildinfo"]
+  "cSpell.words": ["casl", "prisma", "tsbuildinfo", "tseslint"]
 }
