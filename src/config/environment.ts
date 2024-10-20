@@ -1,3 +1,12 @@
+export const Environment = {
+  local: 'local',
+  development: 'development',
+  production: 'production',
+  staging: 'staging',
+} as const;
+
+export type Environment = (typeof Environment)[keyof typeof Environment];
+
 export default () => ({
   env: process.env.NODE_ENV,
 

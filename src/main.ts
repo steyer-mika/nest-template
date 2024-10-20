@@ -7,18 +7,14 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
-import { LoggerConfig } from '@/config/logger';
+import { loggerFactory } from '@/config/logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: false,
+    logger: loggerFactory(process.env.APP_NAME, process.env.NODE_ENV),
   });
 
   const config = app.get<ConfigService>(ConfigService);
-
-  // https://github.com/gremo/nest-winston //
-  const logger = new LoggerConfig(config);
-  app.useLogger(logger.service());
 
   // https://docs.nestjs.com/techniques/compression //
   app.use(compression());

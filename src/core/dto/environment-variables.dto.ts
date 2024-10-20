@@ -1,19 +1,14 @@
+import { Environment } from '@/config/environment';
+import { IsStringOrNumber } from '@/core/decorators/validation/isStringOrNumber';
 import {
   IsEnum,
+  IsNotEmpty,
   IsNumber,
-  Min,
   IsString,
   IsUrl,
   Max,
-  IsNotEmpty,
+  Min,
 } from 'class-validator';
-import { IsStringOrNumber } from '@/core/decorators/validation/isStringOrNumber';
-
-enum Environment {
-  development = 'development',
-  production = 'production',
-  staging = 'staging',
-}
 
 export class EnvironmentVariablesDto {
   @IsEnum(Environment)

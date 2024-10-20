@@ -1,48 +1,64 @@
-import { join } from 'path';
 import { WinstonModule, utilities } from 'nest-winston';
-import { transports, format } from 'winston';
-import { type ConfigService } from '@nestjs/config';
-import { type LoggerService } from '@nestjs/common';
+import { join } from 'path';
+import { format, transports } from 'winston';
 
-export class LoggerConfig {
-  private appName: string;
-  private level: string;
+const getLogLevel = (environment: string | undefined) => {
+  switch (environment) {
+    case 'local':
+    case 'development':
+      return 'debug';
 
-  constructor(configService: ConfigService) {
-    const env = configService.getOrThrow<string>('env');
-    this.appName = configService.getOrThrow<string>('app.name');
-    this.level = env === 'dev' ? 'debug' : 'info';
+    case 'staging':
+    case 'production':
+      return 'info';
+
+    default: {
+      console.warn(
+        `Unknown environment: ${environment}. Defaulting to 'info' log level.`,
+      );
+      return 'info';
+    }
+  }
+};
+
+export const loggerFactory = (
+  appName: string | undefined,
+  environment: string | undefined,
+) => {
+  const level = getLogLevel(environment);
+
+  if (!appName) {
+    console.warn('No application name provided. Defaulting to "NestWinston"');
   }
 
-  service(): LoggerService {
-    return WinstonModule.createLogger({
-      transports: [
-        new transports.Console({
-          format: format.combine(
-            format.timestamp({
-              format: 'YYYY-MM-DD HH:mm:ss',
-            }),
-            format.ms(),
-            utilities.format.nestLike(this.appName, {
-              colors: true,
-              prettyPrint: true,
-            }),
-          ),
-        }),
-        new transports.File({
-          dirname: join(__dirname, `./../logs/${this.level}/`),
-          filename: `${this.level}.log`,
-          level: this.level,
-          format: format.combine(
-            format.ms(),
-            format.timestamp(),
-            utilities.format.nestLike(this.appName, {
-              colors: false,
-              prettyPrint: true,
-            }),
-          ),
-        }),
-      ],
-    });
-  }
-}
+  return WinstonModule.createLogger({
+    transports: [
+      new transports.Console({
+        format: format.combine(
+          format.timestamp(),
+          format.ms(),
+          utilities.format.nestLike(appName, {
+            colors: true,
+            appName: true,
+            prettyPrint: true,
+          }),
+        ),
+      }),
+      new transports.File({
+        dirname: join(__dirname, `./../../logs/${level}/`),
+        filename: `${level}.log`,
+        level,
+        format: format.combine(
+          format.ms(),
+          format.timestamp(),
+          utilities.format.nestLike(appName, {
+            colors: false,
+            prettyPrint: true,
+            appName: true,
+            processId: true,
+          }),
+        ),
+      }),
+    ],
+  });
+};
