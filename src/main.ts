@@ -22,7 +22,7 @@ async function bootstrap() {
   // https://docs.nestjs.com/security/helmet //
   app.use(
     helmet({
-      crossOriginResourcePolicy: true,
+      crossOriginResourcePolicy: false,
     }),
   );
 
@@ -32,6 +32,9 @@ async function bootstrap() {
   // https://docs.nestjs.com/security/cors //
   app.enableCors({
     origin: config.getOrThrow<string>('frontend.url'),
+    allowedHeaders: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   });
 
   // https://docs.nestjs.com/techniques/cookies //
