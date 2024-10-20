@@ -6,8 +6,8 @@ Nest Template is a comprehensive application development setup that covers vario
 
 ### Requirements
 
-- Node (v20.8.0 or higher)
-- NPM (v10.2.0 or higher)
+- Node (v20.17.0 or higher)
+- NPM (v10.9.0 or higher)
 - Docker
 
 ### VS Code Extensions
