@@ -7,11 +7,11 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
-import { loggerFactory } from '@/config/logger';
+import { LoggerConfig } from '@/config/logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: loggerFactory(process.env.APP_NAME, process.env.NODE_ENV),
+    logger: LoggerConfig.new(),
   });
 
   const config = app.get<ConfigService>(ConfigService);
