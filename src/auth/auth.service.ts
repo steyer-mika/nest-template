@@ -1,14 +1,14 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { type ConfigService } from '@nestjs/config';
-import { type JwtService, type JwtSignOptions } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 
 import { type CreateUserDto } from '@/api/user/dto/create-user.dto';
 import { UserDto } from '@/api/user/dto/user.dto';
-import { type UserService } from '@/api/user/user.service';
-import { type MailService } from '@/services/mail/mail.service';
-import { type PrismaService } from '@/services/prisma/prisma.service';
+import { UserService } from '@/api/user/user.service';
+import { MailService } from '@/services/mail/mail.service';
+import { PrismaService } from '@/services/prisma/prisma.service';
 
 import { type EmailDto } from './dto/email.dto';
 import { type ResetPasswordDto } from './dto/reset-password.dto';

@@ -4,7 +4,7 @@ import { plainToInstance } from 'class-transformer';
 import { Strategy } from 'passport-local';
 
 import { UserDto } from '@/api/user/dto/user.dto';
-import { type AuthService } from '@/auth/auth.service';
+import { AuthService } from '@/auth/auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {

@@ -3,12 +3,12 @@ import {
   type ExecutionContext,
   Injectable,
 } from '@nestjs/common';
-import { type Reflector } from '@nestjs/core';
+import { Reflector } from '@nestjs/core';
 
 import { type UserDto } from '@/api/user/dto/user.dto';
 import {
   type AppAbility,
-  type CaslAbilityFactory,
+  CaslAbilityFactory,
 } from '@/auth/casl/casl-ability.factory';
 import {
   CHECK_POLICIES_KEY,
