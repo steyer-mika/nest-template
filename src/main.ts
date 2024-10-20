@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
+import { Environment } from '@/config/environment';
 import { LoggerConfig } from '@/config/logger';
 
 async function bootstrap() {
@@ -48,18 +49,20 @@ async function bootstrap() {
     }),
   );
 
-  // https://docs.nestjs.com/openapi/introduction //
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle(config.getOrThrow<string>('app.name'))
-    .setDescription(`${config.getOrThrow<string>('app.name')} API`)
-    .setVersion(process.env.npm_package_version || '0.0.1')
-    .addBearerAuth()
-    .build();
+  if (config.getOrThrow<Environment>('env') === 'local') {
+    // https://docs.nestjs.com/openapi/introduction //
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle(config.getOrThrow<string>('app.name'))
+      .setDescription(`${config.getOrThrow<string>('app.name')} API`)
+      .setVersion(process.env.npm_package_version || '0.0.1')
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document, {
-    customfavIcon: 'favicon.ico',
-  });
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api', app, document, {
+      customfavIcon: 'favicon.ico',
+    });
+  }
 
   await app.listen(config.getOrThrow<number>('app.port'));
 }
