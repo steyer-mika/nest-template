@@ -1,28 +1,34 @@
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import {
   type MiddlewareConsumer,
   Module,
   type NestModule,
 } from '@nestjs/common';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { ConfigService, ConfigModule } from '@nestjs/config';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
 
-import { validateEnvironmentVariables } from '@/core/validation/environment';
-import { LoggerMiddleware } from '@/core/middleware/logger.middleware';
-import environment from '@/config/environment';
+import { ApiModule } from '@/api/api.module';
+import { AuthModule } from '@/auth/auth.module';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { PoliciesGuard } from '@/auth/guards/policies.guard';
-import { AuthModule } from '@/auth/auth.module';
-import { UserModule } from '@/api/user/user.module';
+import environment from '@/config/environment';
+import { LoggerMiddleware } from '@/core/middleware/logger.middleware';
+import { validateEnvironmentVariables } from '@/core/validation/environment';
 import { HealthModule } from '@/services/health/health.module';
 import { MailModule } from '@/services/mail/mail.module';
 import { PrismaModule } from '@/services/prisma/prisma.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: validateEnvironmentVariables,
+      load: [environment],
+    }),
+
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,12 +36,6 @@ import { PrismaModule } from '@/services/prisma/prisma.module';
         ttl: configService.get<number>('cache.ttl'),
         limit: configService.get<number>('cache.limit'),
       }),
-    }),
-
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validate: validateEnvironmentVariables,
-      load: [environment],
     }),
 
     ServeStaticModule.forRoot({
@@ -59,9 +59,10 @@ import { PrismaModule } from '@/services/prisma/prisma.module';
 
     HealthModule,
     AuthModule,
-    UserModule,
+    ApiModule,
     MailModule,
     PrismaModule,
+    ApiModule,
   ],
   providers: [
     {
