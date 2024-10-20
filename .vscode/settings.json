@@ -1,22 +1,30 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
-  "editor.rulers": [
-    {
-      "column": 80,
-      "color": "#32CD3255"
-    },
-    {
-      "column": 120,
-      "color": "#cdc83255"
-    },
-    {
-      "column": 160,
-      "color": "#cd323255"
-    }
-  ],
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.sortImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [
+    {
+      "color": "#32CD3255",
+      "column": 80
+    },
+    {
+      "color": "#cdc83255",
+      "column": 120
+    },
+    {
+      "color": "#cd323255",
+      "column": 160
+    }
+  ],
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+
   "cSpell.words": ["casl", "prisma", "tsbuildinfo"]
 }
