@@ -1,9 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import helmet from 'helmet';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
 import { LoggerConfig } from '@/config/logger';
@@ -36,6 +37,9 @@ async function bootstrap() {
   app.enableCors({
     origin: config.getOrThrow<string>('frontend.url'),
   });
+
+  // https://docs.nestjs.com/techniques/cookies //
+  app.use(cookieParser());
 
   // https://docs.nestjs.com/techniques/validation //
   app.useGlobalPipes(
