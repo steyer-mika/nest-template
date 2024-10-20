@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import { AppModule } from '@/app.module';
-import { Environment } from '@/config/environment';
+import { type Environment } from '@/config/environment';
 import { LoggerConfig } from '@/config/logger';
 
 async function bootstrap() {
