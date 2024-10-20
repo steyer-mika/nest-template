@@ -74,7 +74,7 @@ export class EnvironmentVariablesDto {
 
   @IsNumber()
   @Min(0)
-  CACHE_MAX: number;
+  CACHE_LIMIT: number;
 
   @IsNotEmpty()
   @IsString()

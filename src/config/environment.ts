@@ -41,7 +41,7 @@ export default () => ({
 
   cache: {
     ttl: parseInt(process.env.CACHE_TTL || '10', 10),
-    max: parseInt(process.env.CACHE_MAX || '5', 10),
+    limit: parseInt(process.env.CACHE_LIMIT || '5', 10),
   },
 
   mail: {
